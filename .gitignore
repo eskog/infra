@@ -1,2 +1,6 @@
 setenv.sh
 vars.pkr.hcl
+*.lock.hcl
+*.tfstate
+*tfstate.backup
+terraform/Devbox/.terraform/*
