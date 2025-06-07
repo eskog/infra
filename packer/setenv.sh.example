@@ -1,0 +1,6 @@
+#Source this!
+export PVEHOST="0.0.0.0"
+export PVENODE="node1"
+export VMID="1337"
+export PKR_VAR_TOKEN_ID="token_id"
+export PKR_VAR_TOKEN_SECRET="secret"
