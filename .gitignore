@@ -4,3 +4,5 @@ vars.pkr.hcl
 *.tfstate
 *tfstate.backup
 terraform/Devbox/.terraform/*
+rndc.key
+.vscode/*
