@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "TOKEN_USER" {
+variable "TOKEN_ID" {
   type    = string
   sensitive = true
 }
@@ -60,7 +60,7 @@ source "proxmox-iso" "rocky" {
   template_description = "Rocky 9, generated on ${timestamp()}"
   template_name        = "rocky-9"
   
-  username             = "${var.TOKEN_USER}"
+  username             = "${var.TOKEN_ID}"
   
   vm_id                = 9000
   memory               = 2048
