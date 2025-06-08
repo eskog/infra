@@ -1,12 +1,13 @@
+$ORIGIN 0.10.in-addr.arpa.
 $TTL 86400
-@   IN  SOA  ns1.{{ domain_name }}. admin.{{ domain_name }}. (
-        2025060801 ; Serial
+@   IN  SOA  dns01.{{ domain_name }}. admin.{{ domain_name }}. (
+        2025060803 ; Serial
         3600       ; Refresh
         1800       ; Retry
         604800     ; Expire
         86400 )    ; Minimum TTL
 ;
-@       IN  NS      ns1.{{ domain_name }}.
-{{ dns_server_ip.split('.')[-1] }}      IN  PTR     ns1.{{ domain_name }}.
+@       IN  NS      dns01.{{ domain_name }}.
+{{ dns_server_ip.split('.')[-1] }}.{{ dns_server_ip.split('.')[-2] }}      IN  PTR     dns01.{{ domain_name }}.
 
 

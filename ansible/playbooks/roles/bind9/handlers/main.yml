@@ -1,5 +1,9 @@
 ---
-- name: restart named
+- name: Restart named
   service:
     name: named
     state: restarted
+
+- name: Reload firewalld
+  ansible.builtin.command: firewall-cmd --reload
+  become: true

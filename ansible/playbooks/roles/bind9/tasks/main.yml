@@ -2,7 +2,7 @@
 - name: Load vaulted variables
   include_vars:
     file: vars/vault.yml
-    
+
 - name: Install bind package
   dnf:
     name: bind
@@ -13,6 +13,14 @@
     name: named
     enabled: yes
     state: started
+
+- name: Create /etc/named.conf
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    owner: named
+    group: named
+    mode: '0644'
 
 - name: Create zone forward file from template
   template:
@@ -44,9 +52,25 @@
     owner: root
     group: root
     mode: '0644'
-  notify: restart named
+  notify: Restart named
+
+- name: Allow DNS over TCP in firewalld
+  ansible.posix.firewalld:
+    port: 53/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+  notify: Reload firewalld
+
+- name: Allow DNS over UDP in firewalld
+  ansible.posix.firewalld:
+    port: 53/udp
+    permanent: true
+    state: enabled
+    immediate: true
+  notify: Reload firewalld
+
 
 - name: Set SELinux context for zone files
   command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
-
 

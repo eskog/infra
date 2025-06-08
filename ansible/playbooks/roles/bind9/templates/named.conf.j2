@@ -1,0 +1,83 @@
+//
+// named.conf.j2
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+
+options {
+        listen-on port {{ listen_on_port }} { {% for ip in listen_on_ips %}{{ ip }}; {% endfor %} };
+        listen-on-v6 port {{ listen_on_v6_port }} { {% for ip6 in listen_on_v6_ips %}{{ ip6 }}; {% endfor %} };
+        directory       "{{ zone_file_dir }}";
+        dump-file       "{{ dump_file }}";
+        statistics-file "{{ statistics_file }}";
+        memstatistics-file "{{ memstatistics_file }}";
+        secroots-file   "{{ secroots_file }}";
+        recursing-file  "{{ recursing_file }}";
+        allow-query     { {% for net in allow_query %}{{ net }}; {% endfor %} };
+        allow-update { key "{{ allow_update_key }}"; };
+
+        /*
+         - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.
+         - If you are building a RECURSIVE (caching) DNS server, you need to enable
+           recursion.
+         - If your recursive DNS server has a public IP address, you MUST enable access
+           control to limit queries to your legitimate users. Failing to do so will
+           cause your server to become part of large scale DNS amplification
+           attacks. Implementing BCP38 within your network would greatly
+           reduce such attack surface
+        */
+        recursion {{ recursion }};
+        forward only;
+        forwarders {
+                {% for forwarder in forwarders %}{{ forwarder }}; {% endfor %}
+        };
+        dnssec-validation {{ dnssec_validation }};
+        dnssec-enable {{ dnssec_enable }};
+
+        managed-keys-directory "{{ managed_keys_directory }}";
+        geoip-directory "{{ geoip_directory }}";
+
+        pid-file "{{ pid_file }}";
+        session-keyfile "{{ session_keyfile }}";
+
+        /* https://fedoraproject.org/wiki/Changes/CryptoPolicy */
+        include "{{ include_crypto_policy }}";
+};
+
+logging {
+  channel update_debug {
+    file "{{ log_named_ddns }}";
+    severity debug 3;
+    print-severity yes;
+    print-time yes;
+  };
+
+  category update {
+    update_debug;
+  };
+
+  category security {
+    update_debug;
+  };
+
+  category update-security {
+    update_debug;
+  };
+
+  channel querylog {
+    file "{{ log_querylog }}";
+    severity info;
+    print-time yes;
+  };
+  category queries { querylog; };
+};
+
+zone "." IN {
+        type hint;
+        file "{{ zone_root_file }}";
+};
+
+include "{{ include_rfc1912_zones }}";
+include "{{ include_root_key }}";
+include "{{ include_conf_local }}";

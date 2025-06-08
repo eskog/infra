@@ -3,6 +3,9 @@
 default-lease-time 86400;
 max-lease-time     604800;
 ddns-update-style interim;
+update-static-leases on;
+ddns-domainname "lab.skog.network.";
+ddns-rev-domainname "in-addr.arpa.";
 ignore client-updates;
 
 key "{{ dhcp_ddns_key_name }}" {
@@ -11,12 +14,12 @@ key "{{ dhcp_ddns_key_name }}" {
 };
 
 zone lab.skog.network. {
-  primary 10.0.29.11;
+  primary 10.0.29.12;
   key "{{ dhcp_ddns_key_name }}";
 }
 
 zone 0.10.in-addr.arpa. {
-  primary 10.0.29.11;
+  primary 10.0.29.12;
   key "{{ dhcp_ddns_key_name }}";
 }
 
@@ -24,6 +27,8 @@ zone 0.10.in-addr.arpa. {
 subnet 10.0.{{ subnet }}.0 netmask 255.255.255.0 {
   option routers 10.0.{{ subnet }}.1;
   option domain-name-servers {{ dhcp_dns_servers | join(", ") }};
+  option domain-name "lab.skog.network.";
+  use-host-decl-names on;
   range 10.0.{{ subnet }}.{{ dhcp_range_start }} 10.0.{{ subnet }}.{{ dhcp_range_end }};
 }
 {% endfor %}
