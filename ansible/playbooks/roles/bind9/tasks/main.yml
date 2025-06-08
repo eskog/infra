@@ -1,0 +1,48 @@
+---
+- name: Install bind package
+  dnf:
+    name: bind
+    state: present
+
+- name: Ensure named is enabled and started
+  service:
+    name: named
+    enabled: yes
+    state: started
+
+- name: Create zone forward file from template
+  template:
+    src: zone_forward.j2
+    dest: "{{ zone_file_dir }}/{{ zone_forward_file }}"
+    owner: named
+    group: named
+    mode: '0644'
+
+- name: Create zone reverse file from template
+  template:
+    src: zone_reverse.j2
+    dest: "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+    owner: named
+    group: named
+    mode: '0644'
+
+- name: Backup original named.conf.local if exists
+  copy:
+    src: /etc/named.conf.local
+    dest: /etc/named.conf.local.bak
+    remote_src: yes
+  ignore_errors: yes
+
+- name: Deploy named.conf.local from template
+  template:
+    src: named.conf.local.j2
+    dest: /etc/named.conf.local
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart named
+
+- name: Set SELinux context for zone files
+  command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+
+

@@ -94,7 +94,7 @@ resource "proxmox_vm_qemu" "devbox" {
   # SECTION Cloud Init Settings
 
   # FIXME Before deployment, adjust according to your network configuration
-  ipconfig0 = "ip=10.0.29.11/24,gw=10.0.29.1"
+  ipconfig0 = "ip=10.0.29.12/24,gw=10.0.29.1"
   nameserver = "10.0.29.1"
   ciuser = "skogen"
   sshkeys = file(var.PUBLIC_SSH_KEY)

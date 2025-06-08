@@ -1,0 +1,16 @@
+key "updatekey" {
+    algorithm hmac-sha256;
+    secret "{{ TSIG_key }}";
+};
+
+zone "{{ domain_name }}" IN {
+    type master;
+    file "{{ zone_forward_file }}";
+    allow-update { key "updatekey"; };
+};
+
+zone "1.168.192.in-addr.arpa" IN {
+    type master;
+    file "{{ zone_reverse_file }}";
+    allow-update { key "updatekey"; };
+};

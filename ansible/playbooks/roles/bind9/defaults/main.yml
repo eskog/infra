@@ -1,0 +1,8 @@
+---
+domain_name: lab.skog.network
+zone_file_dir: /var/named
+zone_forward_file: "db.{{ domain_name }}"
+zone_reverse_file: "db.10.0"  # adjust reverse subnet here
+dns_server_ip: "{{ ansible_default_ipv4.address | default('192.168.1.53') }}"
+TSIG_key: "en nyckel" #TODO Make this vaulted!
+
