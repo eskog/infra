@@ -8,6 +8,22 @@
     state: present
   become: true
 
+- name: Ensure /var/lib/dhcpd has correct ownership and permissions
+  file:
+    path: /var/lib/dhcpd
+    owner: dhcpd
+    group: dhcpd
+    mode: '0755'
+    state: directory
+
+- name: Ensure /var/lib/dhcpd/dhcpd.leases exists with correct ownership and permissions
+  file:
+    path: /var/lib/dhcpd/dhcpd.leases
+    state: touch
+    owner: dhcpd
+    group: dhcpd
+    mode: '0644'
+
 - name: Configure dhcpd.conf
   template:
     src: dhcpd.conf.j2
