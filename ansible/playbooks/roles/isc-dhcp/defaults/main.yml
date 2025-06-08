@@ -1,5 +1,4 @@
 dhcp_dns_servers:
-  - 10.0.29.11
   - 10.0.29.12
 
 dhcp_ddns_key_name: "dhcp_update"
