@@ -1,16 +1,16 @@
-resource "proxmox_vm_qemu" "bastion" {
+resource "proxmox_vm_qemu" "podman" {
 
   # SECTION General Settings
 
-  name = "devbox"
-  desc = "devbox"
+  name = "podman01"
+  desc = "podman01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name
   target_node = var.pvenode
 
   # FIXME Before deployment, set the desired VM ID (must be unique on the target node)
-  vmid = 103
+  vmid = 104
 
   # !SECTION
   
@@ -52,7 +52,7 @@ resource "proxmox_vm_qemu" "bastion" {
 
   network {
     id     = 0  # NOTE Required since 3.x.x
-    bridge = "lab21"
+    bridge = "lab22"
     model  = "virtio"
   }
 
@@ -103,6 +103,6 @@ resource "proxmox_vm_qemu" "bastion" {
   # !SECTION
 }
 
-output "vm_ip_bastion" {
-  value = proxmox_vm_qemu.bastion.default_ipv4_address
+output "vm_ip_podman" {
+  value = proxmox_vm_qemu.podman.default_ipv4_address
 }
