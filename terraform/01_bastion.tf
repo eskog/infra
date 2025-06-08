@@ -1,4 +1,4 @@
-resource "proxmox_vm_qemu" "devbox" {
+resource "proxmox_vm_qemu" "bastion" {
 
   # SECTION General Settings
 
@@ -103,6 +103,6 @@ resource "proxmox_vm_qemu" "devbox" {
   # !SECTION
 }
 
-output "vm_ip" {
-  value = proxmox_vm_qemu.devbox.default_ipv4_address
+output "vm_ip_bastion" {
+  value = proxmox_vm_qemu.bastion.default_ipv4_address
 }

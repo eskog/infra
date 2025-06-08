@@ -1,4 +1,4 @@
-resource "proxmox_vm_qemu" "devbox" {
+resource "proxmox_vm_qemu" "dns" {
 
   # SECTION General Settings
 
@@ -102,6 +102,6 @@ resource "proxmox_vm_qemu" "devbox" {
   # !SECTION
 }
 
-output "vm_ip" {
-  value = proxmox_vm_qemu.devbox.default_ipv4_address
+output "vm_ip_dns" {
+  value = proxmox_vm_qemu.dns.default_ipv4_address
 }
