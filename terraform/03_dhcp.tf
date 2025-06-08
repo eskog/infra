@@ -1,16 +1,16 @@
-resource "proxmox_vm_qemu" "dns" {
+resource "proxmox_vm_qemu" "dhcp" {
 
   # SECTION General Settings
 
-  name = "dns01"
-  desc = "dns01"
+  name = "dhcp01"
+  desc = "dhcp01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name
   target_node = var.pvenode
 
   # FIXME Before deployment, set the desired VM ID (must be unique on the target node)
-  vmid = 101
+  vmid = 102
 
   # !SECTION
   
@@ -39,7 +39,7 @@ resource "proxmox_vm_qemu" "dns" {
   bios = "seabios"
   memory = 2048
   cpu {
-    cores = 4
+    cores = 2
     sockets = 1
     type = "host"
   }
@@ -94,7 +94,7 @@ resource "proxmox_vm_qemu" "dns" {
   # SECTION Cloud Init Settings
 
   # FIXME Before deployment, adjust according to your network configuration
-  ipconfig0 = "ip=10.0.29.12/24,gw=10.0.29.1"
+  ipconfig0 = "ip=10.0.29.254/24,gw=10.0.29.1"
   nameserver = "10.0.29.1"
   ciuser = "skogen"
   sshkeys = file(var.PUBLIC_SSH_KEY)
@@ -102,6 +102,6 @@ resource "proxmox_vm_qemu" "dns" {
   # !SECTION
 }
 
-output "vm_ip_dns" {
-  value = proxmox_vm_qemu.dns.default_ipv4_address
+output "vm_ip_dhcp" {
+  value = proxmox_vm_qemu.dhcp.default_ipv4_address
 }

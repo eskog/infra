@@ -10,7 +10,7 @@ resource "proxmox_vm_qemu" "bastion" {
   target_node = var.pvenode
 
   # FIXME Before deployment, set the desired VM ID (must be unique on the target node)
-  vmid = 0
+  vmid = 100
 
   # !SECTION
   
