@@ -1,0 +1,25 @@
+- name: Load vaulted variables
+  include_vars:
+    file: vars/vault.yml
+
+- name: Install ISC DHCP server
+  dnf:
+    name: dhcp-server
+    state: present
+  become: true
+
+- name: Configure dhcpd.conf
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: restart dhcpd
+
+- name: Enable and start DHCP server
+  systemd:
+    name: dhcpd
+    enabled: yes
+    state: started

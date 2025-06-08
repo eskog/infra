@@ -2,7 +2,12 @@ all:
   hosts:
     dns01.lab.skog.network:
       ansible_host: 10.0.29.12
+    dhcp01.lab.skog.network:
+      ansible_host: 10.0.29.254
   children:
     dns:
       hosts:
         dns01.lab.skog.network:
+    dhcp:
+      hosts:
+        dhcp01.lab.skog.network:

@@ -1,0 +1,10 @@
+dhcp_dns_servers:
+  - 10.0.29.11
+  - 10.0.29.12
+
+dhcp_ddns_key_name: "dhcp_update"
+
+dhcp_subnets: "{{ range(21, 30) | list }}"
+
+dhcp_range_start: 51
+dhcp_range_end: 250
