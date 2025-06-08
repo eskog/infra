@@ -3,13 +3,13 @@ key "updatekey" {
     secret "{{ TSIG_key }}";
 };
 
-zone "{{ domain_name }}" IN {
+zone "{{ domain_name }}". IN {
     type master;
     file "{{ zone_forward_file }}";
     allow-update { key "updatekey"; };
 };
 
-zone "1.168.192.in-addr.arpa" IN {
+zone "0.10.in-addr.arpa". IN {
     type master;
     file "{{ zone_reverse_file }}";
     allow-update { key "updatekey"; };

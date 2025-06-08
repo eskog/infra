@@ -1,4 +1,8 @@
 ---
+- name: Load vaulted variables
+  include_vars:
+    file: vars/vault.yml
+    
 - name: Install bind package
   dnf:
     name: bind
