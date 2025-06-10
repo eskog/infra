@@ -8,12 +8,6 @@
     name: bind
     state: present
 
-- name: Ensure named is enabled and started
-  service:
-    name: named
-    enabled: yes
-    state: started
-
 - name: Create /etc/named.conf
   template:
     src: named.conf.j2
@@ -29,11 +23,29 @@
     owner: named
     group: named
     mode: '0644'
+  notify: Restart named
 
 - name: Create zone reverse file from template
   template:
     src: zone_reverse.j2
     dest: "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+    owner: named
+    group: named
+    mode: '0644'
+  notify: Restart named
+
+- name: Ensure parent directory exists
+  ansible.builtin.file:
+    path: /var/log/named
+    state: directory
+    owner: named
+    group: named
+    mode: '0755'
+
+- name: Ensure query.log exists
+  file:
+    path: /var/log/named/query.log
+    state: touch
     owner: named
     group: named
     mode: '0644'
@@ -53,6 +65,13 @@
     group: root
     mode: '0644'
   notify: Restart named
+
+- name: Ensure named is enabled and started
+  service:
+    name: named
+    enabled: yes
+    state: started
+  become: yes
 
 - name: Allow DNS over TCP in firewalld
   ansible.posix.firewalld:
