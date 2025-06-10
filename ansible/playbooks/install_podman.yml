@@ -1,0 +1,8 @@
+---
+- name: Setup podman
+  gather_facts: yes
+  hosts: podman
+  become: yes
+
+  roles:
+    - podman
