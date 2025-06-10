@@ -10,7 +10,7 @@ resource "proxmox_vm_qemu" "dns" {
   target_node = var.pvenode
 
   # FIXME Before deployment, set the desired VM ID (must be unique on the target node)
-  vmid = 101
+  vmid = 102
 
   # !SECTION
   
@@ -39,7 +39,7 @@ resource "proxmox_vm_qemu" "dns" {
   bios = "seabios"
   memory = 2048
   cpu {
-    cores = 4
+    cores = 2
     sockets = 1
     type = "host"
   }
