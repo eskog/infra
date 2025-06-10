@@ -1,15 +1,15 @@
 ---
 - name: Load vaulted variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: vars/vault.yml
 
 - name: Install bind package
-  dnf:
+  ansible.builtin.dnf:
     name: bind
     state: present
 
 - name: Create /etc/named.conf
-  template:
+  ansible.builtin.template:
     src: named.conf.j2
     dest: /etc/named.conf
     owner: named
@@ -17,7 +17,7 @@
     mode: '0644'
 
 - name: Create zone forward file from template
-  template:
+  ansible.builtin.template:
     src: zone_forward.j2
     dest: "{{ zone_file_dir }}/{{ zone_forward_file }}"
     owner: named
@@ -43,7 +43,7 @@
     mode: '0755'
 
 - name: Ensure query.log exists
-  file:
+  ansible.builtin.file:
     path: /var/log/named/query.log
     state: touch
     owner: named
@@ -51,14 +51,14 @@
     mode: '0644'
 
 - name: Backup original named.conf.local if exists
-  copy:
+  ansible.builtin.copy:
     src: /etc/named.conf.local
     dest: /etc/named.conf.local.bak
     remote_src: yes
   ignore_errors: yes
 
 - name: Deploy named.conf.local from template
-  template:
+  ansible.builtin.template:
     src: named.conf.local.j2
     dest: /etc/named.conf.local
     owner: root
@@ -66,8 +66,22 @@
     mode: '0644'
   notify: Restart named
 
+- name: Ensure SELinux context for named log directory is set
+  ansible.builtin.command: >
+    semanage fcontext -a -t named_log_t "/var/log/named(/.*)?"
+  args:
+    creates: /etc/selinux/targeted/contexts/files/file_contexts.local
+  when: ansible_selinux.status == "enabled"
+  become: true
+
+- name: Restore SELinux context on /var/log/named
+  ansible.builtin.command: >
+    restorecon -Rv /var/log/named
+  when: ansible_selinux.status == "enabled"
+  become: true
+
 - name: Ensure named is enabled and started
-  service:
+  ansible.builtin.service:
     name: named
     enabled: yes
     state: started
@@ -91,5 +105,5 @@
 
 
 - name: Set SELinux context for zone files
-  command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+  ansible.builtin.command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
 

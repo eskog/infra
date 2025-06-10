@@ -1,15 +1,15 @@
 - name: Load vaulted variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: vars/vault.yml
 
 - name: Install ISC DHCP server
-  dnf:
+  ansible.builtin.dnf:
     name: dhcp-server
     state: present
   become: true
 
 - name: Ensure /var/lib/dhcpd has correct ownership and permissions
-  file:
+  ansible.builtin.file:
     path: /var/lib/dhcpd
     owner: dhcpd
     group: dhcpd
@@ -17,7 +17,7 @@
     state: directory
 
 - name: Ensure /var/lib/dhcpd/dhcpd.leases exists with correct ownership and permissions
-  file:
+  ansible.builtin.file:
     path: /var/lib/dhcpd/dhcpd.leases
     state: touch
     owner: dhcpd
@@ -25,7 +25,7 @@
     mode: '0644'
 
 - name: Configure dhcpd.conf
-  template:
+  ansible.builtin.template:
     src: dhcpd.conf.j2
     dest: /etc/dhcp/dhcpd.conf
     owner: root
@@ -35,7 +35,7 @@
   notify: restart dhcpd
 
 - name: Enable and start DHCP server
-  systemd:
+  ansible.builtin.systemd:
     name: dhcpd
     enabled: yes
     state: started
