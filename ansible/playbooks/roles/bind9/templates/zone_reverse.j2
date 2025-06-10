@@ -9,5 +9,6 @@ $TTL 86400
 ;
 @       IN  NS      dns01.{{ domain_name }}.
 {{ dns_server_ip.split('.')[-1] }}.{{ dns_server_ip.split('.')[-2] }}      IN  PTR     dns01.{{ domain_name }}.
+{{ dhcp_server_ip.split('.')[-1] }}.{{ dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ domain_name }}.
 
 
