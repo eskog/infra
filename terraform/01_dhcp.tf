@@ -95,7 +95,7 @@ resource "proxmox_vm_qemu" "dhcp" {
 
   # FIXME Before deployment, adjust according to your network configuration
   ipconfig0 = "ip=10.0.29.254/24,gw=10.0.29.1"
-  nameserver = "10.0.29.1"
+  nameserver = "10.0.29.12"
   ciuser = "skogen"
   sshkeys = file(var.PUBLIC_SSH_KEY)
 
