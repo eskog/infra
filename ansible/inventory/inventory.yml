@@ -4,6 +4,8 @@ all:
       ansible_host: 10.0.29.12
     dhcp01.lab.skog.network:
       ansible_host: 10.0.29.254
+    podman01.lab.skog.network:
+      ansible_host: 10.0.22.51
   children:
     dns:
       hosts:
@@ -11,3 +13,6 @@ all:
     dhcp:
       hosts:
         dhcp01.lab.skog.network:
+    podman:
+      hosts:
+        podman01.lab.skog.network:
