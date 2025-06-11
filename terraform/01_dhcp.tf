@@ -97,6 +97,7 @@ resource "proxmox_vm_qemu" "dhcp" {
   ipconfig0 = "ip=10.0.29.254/24,gw=10.0.29.1"
   nameserver = "10.0.29.12"
   ciuser = "skogen"
+  searchdomain = "lab.skog.network"
   sshkeys = file(var.PUBLIC_SSH_KEY)
 
   # !SECTION
