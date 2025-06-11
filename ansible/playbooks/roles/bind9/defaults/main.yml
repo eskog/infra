@@ -23,11 +23,7 @@ secroots_file: /var/named/data/named.secroots
 recursing_file: /var/named/data/named.recursing
 
 allow_query:
-  - 10.0.0.0/8
-  - 172.16.0.0/12
-  - 192.168.0.0/16
-  - localhost
-  - 127.0.0.1
+  - any
 
 allow_update_key: dhcp_update
 
