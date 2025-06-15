@@ -1,0 +1,24 @@
+---
+- name: Setup kubernetes cluster
+  gather_facts: yes
+  hosts: kubernetes
+  become: yes
+
+  roles:
+    - kubernetes_prereqs
+
+- name: Setup masternode(s)
+  gather_facts: no
+  hosts: master01.lab.skog.network
+  become: yes
+
+  roles:
+    - kubernetes_masters
+
+- name: Setup workers
+  gather_facts: yes
+  hosts: kubernetes_workers
+  become: yes
+
+  roles:
+    - kubernetes_workers

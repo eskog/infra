@@ -6,6 +6,25 @@ all:
       ansible_host: 10.0.29.254
     podman01.lab.skog.network:
       ansible_host: 10.0.22.51
+
+    master01.lab.skog.network:
+      ansible_host: 10.0.23.75
+    master02.lab.skog.network:
+      ansible_host: 10.0.23.71
+    master03.lab.skog.network:
+      ansible_host: 10.0.23.74
+    worker01.lab.skog.network:
+      ansible_host: 10.0.23.72
+    worker02.lab.skog.network:
+      ansible_host: 10.0.23.76
+    worker03.lab.skog.network:
+      ansible_host: 10.0.23.78
+    worker04.lab.skog.network:
+      ansible_host: 10.0.23.79
+    worker05.lab.skog.network:
+      ansible_host: 10.0.23.73
+    worker06.lab.skog.network:
+      ansible_host: 10.0.23.77
   children:
     dns:
       hosts:
@@ -16,3 +35,21 @@ all:
     podman:
       hosts:
         podman01.lab.skog.network:
+    
+    kubernetes_masters:
+      hosts:
+        master01.lab.skog.network:
+        master02.lab.skog.network:
+        master03.lab.skog.network:
+    kubernetes_workers:
+      hosts:
+        worker01.lab.skog.network:
+        worker02.lab.skog.network:
+        worker03.lab.skog.network:
+        worker04.lab.skog.network:
+        worker05.lab.skog.network:
+        worker06.lab.skog.network:
+    kubernetes:
+      children:
+        kubernetes_masters:
+        kubernetes_workers:
