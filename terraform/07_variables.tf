@@ -21,19 +21,19 @@ variable "k8s_worker_nodes" {
       vmid = 1102
     }
     "worker03" = {
-      hostname     = "master03"
+      hostname     = "worker03"
       vmid = 1103
     }
     "worker04" = {
-      hostname     = "master04"
+      hostname     = "worker04"
       vmid = 1104
     }
     "worker05" = {
-      hostname     = "master05"
+      hostname     = "worker05"
       vmid = 1105
     }
     "worker06" = {
-      hostname     = "master06"
+      hostname     = "worker06"
       vmid = 1106
     }
   }
