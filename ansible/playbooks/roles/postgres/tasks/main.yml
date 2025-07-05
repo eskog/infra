@@ -1,0 +1,53 @@
+#SPDX-License-Identifier: MIT-0
+---
+- name: Load vaulted variables
+  ansible.builtin.include_vars:
+    file: vars/vault.yml
+
+- name: Ensure SELinux is enabled and enforcing
+  selinux:
+    policy: targeted
+    state: enforcing
+
+- name: Install packages server
+  dnf:
+    name: 
+      - postgresql-server
+      - python3-psycopg2
+    state: present
+
+- name: Initialize PostgreSQL database
+  command: postgresql-setup --initdb
+  args:
+    creates: /var/lib/pgsql/data/PG_VERSION
+
+- name: Enable and start PostgreSQL
+  systemd:
+    name: postgresql
+    enabled: true
+    state: started
+
+- name: Allow connections from {{ allowed_network }}
+  template:
+    src: pg_hba.conf.j2
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: '0600'
+  notify: Restart PostgreSQL
+
+- name: Configure listen_addresses to '*'
+  lineinfile:
+    path: /var/lib/pgsql/data/postgresql.conf
+    regexp: '^#?listen_addresses\s*='
+    line: "listen_addresses = '*'"
+    backup: yes
+  notify: Restart PostgreSQL
+
+- name: Create admin PostgreSQL user
+  become_user: postgres
+  postgresql_user:
+    name: "{{ postgres_admin_user }}"
+    password: "{{ postgres_admin_password }}"
+    encrypted: yes
+    role_attr_flags: "CREATEDB,CREATEROLE,LOGIN"

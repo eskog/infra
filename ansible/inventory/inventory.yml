@@ -6,6 +6,8 @@ all:
       ansible_host: 10.0.29.254
     podman01.lab.skog.network:
       ansible_host: 10.0.22.51
+    db01.lab.skog.network:
+      ansible_host: 10.0.22.52   
 
     master01.lab.skog.network:
       ansible_host: 10.0.23.75
@@ -35,6 +37,10 @@ all:
     podman:
       hosts:
         podman01.lab.skog.network:
+    databases:
+      hosts:
+        db01.lab.skog.network:
+        
     
     kubernetes_masters:
       hosts:
