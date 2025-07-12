@@ -9,6 +9,15 @@
     policy: targeted
     state: enforcing
 
+- name: Open PostgreSQL port 5432/tcp in firewalld
+  become: true
+  ansible.posix.firewalld:
+    port: 5432/tcp
+    permanent: true
+    state: enabled
+    immediate: false
+  notify: Reload firewalld
+
 - name: Install packages server
   dnf:
     name: 

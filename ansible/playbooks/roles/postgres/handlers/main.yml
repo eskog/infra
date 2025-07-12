@@ -5,3 +5,6 @@
     name: postgresql
     state: restarted
 
+- name: Reload firewalld
+  become: true
+  ansible.builtin.command: firewall-cmd --reload
