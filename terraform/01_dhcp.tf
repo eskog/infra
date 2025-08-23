@@ -25,7 +25,7 @@ resource "proxmox_vm_qemu" "dhcp" {
 
   # SECTION Boot Process
 
-  onboot = false 
+  onboot = true 
 
   # NOTE Change startup, shutdown and auto reboot behavior
   startup = ""
