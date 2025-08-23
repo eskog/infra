@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     name = {
-      version = "~>1"
+      version = "1.2.3"
       source = "github.com/hashicorp/proxmox"
     }
   }
@@ -46,7 +46,7 @@ source "proxmox-iso" "rocky" {
     type              = "sata"
   }
   network_adapters {
-    bridge = "devClient"
+    bridge = "stageing"
     model  = "virtio"
   }
   node                 = "pve01"
