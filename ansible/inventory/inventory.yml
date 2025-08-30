@@ -9,24 +9,25 @@ all:
     db01.lab.skog.network:
       ansible_host: 10.0.22.52   
 
+
     master01.lab.skog.network:
-      ansible_host: 10.0.23.75
+      ansible_host: 10.0.23.223
     master02.lab.skog.network:
-      ansible_host: 10.0.23.71
+      ansible_host: 10.0.23.200
     master03.lab.skog.network:
-      ansible_host: 10.0.23.74
+      ansible_host: 10.0.23.105
     worker01.lab.skog.network:
-      ansible_host: 10.0.23.72
+      ansible_host: 10.0.23.191
     worker02.lab.skog.network:
-      ansible_host: 10.0.23.76
+      ansible_host: 10.0.23.142
     worker03.lab.skog.network:
-      ansible_host: 10.0.23.78
+      ansible_host: 10.0.23.217
     worker04.lab.skog.network:
-      ansible_host: 10.0.23.79
+      ansible_host: 10.0.23.235
     worker05.lab.skog.network:
-      ansible_host: 10.0.23.73
+      ansible_host: 10.0.23.196
     worker06.lab.skog.network:
-      ansible_host: 10.0.23.77
+      ansible_host: 10.0.23.202
   children:
     dns:
       hosts:
