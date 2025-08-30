@@ -11,11 +11,11 @@ all:
 
 
     master01.lab.skog.network:
-      ansible_host: 10.0.23.223
+      ansible_host: 10.0.23.131
     master02.lab.skog.network:
-      ansible_host: 10.0.23.200
+      ansible_host: 10.0.23.141
     master03.lab.skog.network:
-      ansible_host: 10.0.23.105
+      ansible_host: 10.0.23.169
     worker01.lab.skog.network:
       ansible_host: 10.0.23.191
     worker02.lab.skog.network:
