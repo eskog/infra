@@ -33,6 +33,7 @@ all:
       ansible_host: 10.0.23.231
     k1-w9.lab.skog.network:
       ansible_host: 10.0.23.213
+
   children:
     dns:
       hosts:
