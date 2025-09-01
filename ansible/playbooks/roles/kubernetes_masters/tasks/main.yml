@@ -16,7 +16,7 @@
   when: ansible_facts['os_family'] == 'RedHat'
 
 - name: Initialize Kubernetes cluster
-  ansible.builtin.command: kubeadm init --pod-network-cidr=172.30.0.0/16
+  ansible.builtin.command: kubeadm init --pod-network-cidr=10.244.0.0/16
   register: kubeadm_output
   args:
     creates: /etc/kubernetes/admin.conf
@@ -65,10 +65,10 @@
     mode: "0600"
   when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
 
-- name: Install networking plugin
-  ansible.builtin.command: kubectl apply -f /tmp/cni_manifest.yml
-  become: false
-  when: inventory_hostname in groups['kubernetes_masters'][0]
+#- name: Install networking plugin # Manifest generated with: helm template cilium cilium/cilium --namespace kube-system --version 1.18.1 --include-crds --set kubeProxyReplacement=true --set nodePort.enabled=true --set ipam.operator.clusterPoolIPv4PodCIDRList="{172.30.0.0/16}" > /tmp/cilium.yaml
+#  ansible.builtin.command: kubectl apply -f /tmp/cni_manifest.yml
+#  become: false
+#  when: inventory_hostname in groups['kubernetes_masters'][0]
 
 - name: Get join command
   ansible.builtin.shell: kubeadm token create --print-join-command
