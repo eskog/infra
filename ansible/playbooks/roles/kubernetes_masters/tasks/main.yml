@@ -50,7 +50,7 @@
   get_url:
     url: https://get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz
     dest: /tmp/helm-v3.18.6-linux-amd64.tar.gz
-    mode: '0644'
+    mode: '0640'
   become: true
 
 - name: Extract Helm binary
@@ -64,7 +64,7 @@
   copy:
     src: /tmp/linux-amd64/helm
     dest: /usr/local/bin/helm
-    mode: '0755'
+    mode: '0750'
     remote_src: true
   become: true
 
