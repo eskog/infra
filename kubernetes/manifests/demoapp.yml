@@ -1,0 +1,48 @@
+# demo-app.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-demo
+  namespace: demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        resources:
+          requests:
+            cpu: 0.5
+            ephemeral-storage: "20Mi"
+            memory: 90Mi
+          limits:
+            memory: 100Mi
+        ports:
+        - containerPort: 80
+      automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-demo
+  namespace: demo
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx-demo   # must match the labels on your Deployment pods
+  ports:
+    - protocol: TCP
+      port: 80        # external port
+      targetPort: 80  # container port
