@@ -5,5 +5,5 @@ dhcp_ddns_key_name: "dhcp_update"
 
 dhcp_subnets: "{{ range(21, 30) | list }}"
 
-dhcp_range_start: 51
+dhcp_range_start: 101
 dhcp_range_end: 250
