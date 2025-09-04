@@ -56,19 +56,75 @@
 #    src: "{{ cilium_manifest }}"
 #  when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
 
-- name: Copy CNI mainifest
-  ansible.builtin.copy:
-    src: "{{ cilium_manifest }}"
-    dest: /tmp/cni_manifest.yml
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: "0600"
-  when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
-
+#- name: Copy CNI mainifest
+#  ansible.builtin.copy:
+#    src: "{{ cilium_manifest }}"
+#    dest: /tmp/cni_manifest.yml
+#    owner: "{{ ansible_user }}"
+#    group: "{{ ansible_user }}"
+#    mode: "0600"
+#  when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
+#
 #- name: Install networking plugin # Manifest generated with: helm template cilium cilium/cilium --namespace kube-system --version 1.18.1 --include-crds --set kubeProxyReplacement=true --set nodePort.enabled=true --set ipam.operator.clusterPoolIPv4PodCIDRList="{172.30.0.0/16}" > /tmp/cilium.yaml
 #  ansible.builtin.command: kubectl apply -f /tmp/cni_manifest.yml
 #  become: false
 #  when: inventory_hostname in groups['kubernetes_masters'][0]
+
+- name: Ensure Helm repo file exists
+  copy:
+    dest: /etc/yum.repos.d/helm.repo
+    content: |
+      [helm]
+      name=Helm
+      baseurl=https://baltocdn.com/helm/stable/rpm
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://baltocdn.com/helm/signing.asc
+  become: true
+
+- name: Install Helm
+  dnf:
+    name: helm
+    state: present
+  become: true
+
+- name: Add Cilium Helm repo
+  command: helm repo add cilium https://helm.cilium.io/
+  args:
+    creates: ~/.cache/helm/repository/cilium-index.yaml
+
+- name: Update Helm repos
+  command: helm repo update
+
+- name: Generate Cilium manifest with Helm
+  command: >
+    helm template cilium cilium/cilium
+    --namespace kube-system
+    --version 1.18.1
+    --include-crds
+    --set kubeProxyReplacement=true
+    --set routingMode=tunnel
+    --set enableEncapsulation=true
+    --set ipam.mode=cluster-pool
+    --set ipam.operator.clusterPoolIPv4PodCIDRList="{10.244.0.0/16}"
+    --set enableNodePort=true
+    --set nodePort.enabled=true
+    --set hostPort.enabled=true
+    --set externalIPs.enabled=true
+  register: cilium_manifest
+
+- name: Write Cilium manifest to file
+  copy:
+    dest: /tmp/cilium-1.18.1.yml
+    content: "{{ cilium_manifest.stdout }}"
+  become: true
+
+- name: Apply Cilium manifest to cluster
+  kubernetes.core.k8s:
+    kubeconfig: /etc/kubernetes/admin.conf   # adjust path if needed
+    state: present
+    src: /tmp/cilium-1.18.1.yml
+  become: true
 
 - name: Get join command
   ansible.builtin.shell: kubeadm token create --print-join-command
