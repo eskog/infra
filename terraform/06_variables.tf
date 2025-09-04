@@ -1,8 +1,8 @@
 variable "k8s_master_cpu_cores" {
-    default = 4
+    default = 8
 }
 variable "k8s_master_memory" {
-    default = 4096
+    default = 8192
 }
 
 
@@ -12,16 +12,16 @@ variable "k8s_master_nodes" {
     vmid     = number
   }))
   default = {
-    "master01" = {
-      hostname     = "master01"
+    "k1-m1" = {
+      hostname     = "k1-m1"
       vmid = 1001
     }
-    "master02" = {
-      hostname     = "master02"
+    "k1-m2" = {
+      hostname     = "k1-m2"
       vmid = 1002
     }
-    "master03" = {
-      hostname     = "master03"
+    "k1-m3" = {
+      hostname     = "k1-m3"
       vmid = 1003
     }
   }
