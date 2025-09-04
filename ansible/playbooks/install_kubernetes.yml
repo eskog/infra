@@ -9,7 +9,7 @@
 
 - name: Setup masternode(s)
   gather_facts: no
-  hosts: master01.lab.skog.network
+  hosts: kubernetes_masters
   become: yes
 
   roles:

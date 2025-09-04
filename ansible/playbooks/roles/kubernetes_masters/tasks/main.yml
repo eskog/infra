@@ -16,7 +16,7 @@
   when: ansible_facts['os_family'] == 'RedHat'
 
 - name: Initialize Kubernetes cluster
-  ansible.builtin.command: kubeadm init --pod-network-cidr=172.30.0.0/16
+  ansible.builtin.command: kubeadm init --pod-network-cidr=10.244.0.0/16
   register: kubeadm_output
   args:
     creates: /etc/kubernetes/admin.conf
@@ -46,29 +46,63 @@
 # notify:
 #   - Change kubeconfig permissions
 
-#- name: Install networking plugin (Weave Net)
-#  ansible.builtin.command: kubectl apply -f "https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml"
-#  become: false
+- name: Download Helm binary
+  get_url:
+    url: https://get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz
+    dest: /tmp/helm-v3.18.6-linux-amd64.tar.gz
+    mode: '0640'
+  become: true
 
-#- name: Install networking plugin
-#  kubernetes.core.k8s:
-#    state: present
-#    src: "{{ cilium_manifest }}"
-#  when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
+- name: Extract Helm binary
+  unarchive:
+    src: /tmp/helm-v3.18.6-linux-amd64.tar.gz
+    dest: /tmp
+    remote_src: true
+  become: true
 
-- name: Copy CNI mainifest
-  ansible.builtin.copy:
-    src: "{{ cilium_manifest }}"
-    dest: /tmp/cni_manifest.yml
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: "0600"
-  when: inventory_hostname in groups['kubernetes_masters'][0] #only run on the first masternode.
+- name: Move Helm into /usr/local/bin
+  copy:
+    src: /tmp/linux-amd64/helm
+    dest: /usr/local/bin/helm
+    mode: '0750'
+    remote_src: true
+  become: true
 
-- name: Install networking plugin
-  ansible.builtin.command: kubectl apply -f /tmp/cni_manifest.yml
-  become: false
-  when: inventory_hostname in groups['kubernetes_masters'][0]
+- name: Add Cilium Helm repo
+  command: /usr/local/bin/helm repo add cilium https://helm.cilium.io/
+  args:
+    creates: ~/.cache/helm/repository/cilium-index.yaml
+
+- name: Update Helm repos
+  command: /usr/local/bin/helm repo update
+
+- name: Generate Cilium manifest with Helm
+  command: >
+    /usr/local/bin/helm template cilium cilium/cilium
+    --namespace kube-system
+    --version 1.18.1
+    --include-crds
+    --set kubeProxyReplacement=true
+    --set routingMode=tunnel
+    --set enableEncapsulation=true
+    --set ipam.mode=cluster-pool
+    --set ipam.operator.clusterPoolIPv4PodCIDRList="{10.244.0.0/16}"
+    --set enableNodePort=true
+    --set nodePort.enabled=true
+    --set hostPort.enabled=true
+    --set externalIPs.enabled=true
+  register: cilium_manifest
+
+- name: Write Cilium manifest to file
+  copy:
+    dest: /tmp/cilium-1.18.1.yml
+    content: "{{ cilium_manifest.stdout }}"
+  become: true
+
+- name: Apply Cilium manifest to cluster using kubectl
+  command: kubectl apply -f /tmp/cilium-1.18.1.yml --kubeconfig /etc/kubernetes/admin.conf
+  become: true
+
 
 - name: Get join command
   ansible.builtin.shell: kubeadm token create --print-join-command
