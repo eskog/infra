@@ -12,12 +12,12 @@
 
 - name: Wait for port 6443 on master to be reachable
   ansible.builtin.wait_for:
-    host: "{{ hostvars['master01.lab.skog.network']['ansible_default_ipv4']['address'] }}"
+    host: "{{ hostvars['k1-m1.lab.skog.network']['ansible_default_ipv4']['address'] }}"
     port: 6443
     timeout: 5
 
 - name: Join cluster
-  ansible.builtin.shell: "{{ hostvars['master01.lab.skog.network']['join_command'] }} >> node_joined.log"
+  ansible.builtin.shell: "{{ hostvars['k1-m1.lab.skog.network']['join_command'] }} >> node_joined.log"
   args:
     chdir: /home/skogen
     creates: node_joined.log

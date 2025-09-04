@@ -51,17 +51,20 @@ all:
     
     kubernetes_masters:
       hosts:
-        master01.lab.skog.network:
-        master02.lab.skog.network:
-        master03.lab.skog.network:
+        k1-m1.lab.skog.network:
+        #k1-m2.lab.skog.network:
+        #k1-m3.lab.skog.network:
     kubernetes_workers:
       hosts:
-        worker01.lab.skog.network:
-        worker02.lab.skog.network:
-        worker03.lab.skog.network:
-        worker04.lab.skog.network:
-        worker05.lab.skog.network:
-        worker06.lab.skog.network:
+        k1-w1.lab.skog.network:
+        k1-w2.lab.skog.network:
+        k1-w3.lab.skog.network:
+        k1-w4.lab.skog.network:
+        k1-w5.lab.skog.network:
+        k1-w6.lab.skog.network:
+        k1-w7.lab.skog.network:
+        k1-w8.lab.skog.network:
+        k1-w9.lab.skog.network:
     kubernetes:
       children:
         kubernetes_masters:
