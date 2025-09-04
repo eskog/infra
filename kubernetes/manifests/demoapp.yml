@@ -26,6 +26,8 @@ spec:
           requests:
             cpu: 0.5
             ephemeral-storage: "20Mi"
+            memory: 90Mi
+          limits:
             memory: 100Mi
         ports:
         - containerPort: 80
