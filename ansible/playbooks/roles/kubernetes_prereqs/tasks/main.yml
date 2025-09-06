@@ -21,6 +21,7 @@
       - device-mapper-persistent-data
       - lvm2
       - tar
+      - nfs-utils
     state: present
   when: is_rhel
 
