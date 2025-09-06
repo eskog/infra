@@ -1,8 +1,13 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: nfs-provisioner
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nfs-client-provisioner
-  namespace: default
+  namespace: nfs-provisioner
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -32,7 +37,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: nfs-client-provisioner
-    namespace: default
+    namespace: nfs-provisioner
 roleRef:
   kind: ClusterRole
   name: nfs-client-provisioner-runner
@@ -42,6 +47,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nfs-client-provisioner
+  namespace: nfs-provisioner
   labels:
     app: nfs-client-provisioner
 spec:
@@ -55,6 +61,8 @@ spec:
         app: nfs-client-provisioner
     spec:
       serviceAccountName: nfs-client-provisioner
+      securityContext:
+        fsGroup: 65534        # NFS typically works with nobody:nogroup
       containers:
         - name: nfs-client-provisioner
           image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
@@ -68,11 +76,15 @@ spec:
               value: "10.0.24.101"
             - name: NFS_PATH
               value: "/mnt/vol1/kubernetes"
+          args:
+#            - "-nfs-version=4"
+#            - "--leader-election"
       volumes:
         - name: nfs-client-root
           nfs:
             server: "10.0.24.101"
             path: "/mnt/vol1/kubernetes"
+            readOnly: false
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
