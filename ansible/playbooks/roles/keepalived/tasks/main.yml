@@ -1,0 +1,39 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for keepalived
+- name: Install keepalived and utils
+  ansible.builtin.dnf:
+    name:
+      - keepalived
+      - curl
+    state: present
+  become: true
+
+- name: Configure keepalived.conf
+  ansible.builtin.template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: restart keepalived
+
+- name: Allow protocol 112 in mangle PREROUTING
+  ansible.posix.firewalld:
+    state: enabled
+    permanent: true
+    immediate: true
+    zone: public
+    direct: true
+    ipv: ipv4
+    table: mangle
+    chain: PREROUTING
+    priority: 0
+    rule: -p 112 -j ACCEPT
+
+- name: Enable and start keepalived
+  ansible.builtin.systemd:
+    name: keepalived
+    enabled: yes
+    state: started

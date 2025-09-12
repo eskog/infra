@@ -1,0 +1,28 @@
+vrrp_script chk_haproxy {
+    script "curl -sf http://127.0.0.1:80/health >/dev/null"
+    interval 2
+    weight -20
+}
+
+vrrp_instance VI_1 {
+    state {{ keepalived_state }}
+    interface eth0                    # change to your LB interface (e.g., ens192)
+    virtual_router_id {{ keepalived_virtual_router_id }}
+    {% if keepalived_state eq 'MASTER' %}
+    priority 150                      # higher priority on master
+    {% else %}
+    priority 100
+    {% endif %}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_auth_pass }}
+    }
+    virtual_ipaddress {
+        {{ keepalived_virtual_ip }}                  # VIP
+    }
+    track_script {
+        chk_haproxy
+    }
+    # Optional: notify scripts could be used for events (MASTER/SLAVE)
+}
