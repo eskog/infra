@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for ha-proxy
+- name: restart ha-proxy
+  service:
+    name: haproxy
+    state: restarted

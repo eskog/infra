@@ -1,0 +1,43 @@
+global
+    log 127.0.0.1 local0
+    chroot /var/lib/haproxy
+    pidfile /run/haproxy.pid
+    maxconn 20000
+    user haproxy
+    group haproxy
+    daemon
+    # enable admin socket (optional for health checks or graceful reload)
+    stats socket /run/haproxy.sock mode 660 level admin
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    option redispatch
+    retries 3
+
+frontend frontend1
+    bind {{ ha-proxy_frontend_bindaddress }}
+    mode {{ ha-proxy_frontend_mode }}
+    default_backend backend1
+
+backend backend1
+    mode {{ ha-proxy_backend_mode }}
+    balance {{ ha-proxy_backend_balance }}
+    option httpchk GET /health
+    {% for server in ha-proxy_backend_backend-servers %}
+    server {{ server.name }} {{ server.ip }}:{{ server.port }} check inter 2000 rise 2 fall 3
+    {% endfor %}
+
+# HAProxy stats page
+listen stats
+    bind *:8404
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    stats refresh 10s
+    stats auth admin:{{ vault_ha-proxy_stats_password }}

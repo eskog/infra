@@ -1,0 +1,26 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for ha-proxy
+- name: Install ha-proxy and utils
+  ansible.builtin.dnf:
+    name:
+      - haproxy
+      - epel-release
+    state: present
+  become: true
+
+- name: Configure haproxy.conf
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: restart ha-proxy
+
+- name: Enable and start ha-proxy
+  ansible.builtin.systemd:
+    name: haproxy
+    enabled: yes
+    state: started
