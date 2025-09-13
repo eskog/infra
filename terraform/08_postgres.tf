@@ -105,4 +105,5 @@ resource "proxmox_vm_qemu" "postgres" {
 
 output "vm_ip_postgres" {
   value = proxmox_vm_qemu.postgres.default_ipv4_address
+  description = "Assigned IP Address"
 }

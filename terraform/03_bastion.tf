@@ -105,4 +105,5 @@ resource "proxmox_vm_qemu" "bastion" {
 
 output "vm_ip_bastion" {
   value = proxmox_vm_qemu.bastion.default_ipv4_address
+  description = "Assigned IP Address"
 }

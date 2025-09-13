@@ -105,4 +105,5 @@ resource "proxmox_vm_qemu" "podman" {
 
 output "vm_ip_podman" {
   value = proxmox_vm_qemu.podman.default_ipv4_address
+  description = "Assigned IP Address"
 }

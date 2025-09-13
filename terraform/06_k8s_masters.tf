@@ -108,6 +108,7 @@ output "vm_ip_k8s_masters" {
   value = {
     for key, vm in proxmox_vm_qemu.k8s_masters : key => vm.default_ipv4_address
   }
+  description = "Assigned IP Address"
 }
 
 
