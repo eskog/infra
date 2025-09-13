@@ -1,0 +1,26 @@
+name: KICS Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  kics_scan:
+    name: KICS Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: KICS
+        uses: checkmarx/kics-action@v2.1.13
+        with:
+          path: ./
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output_path: kics_results/
+          enable_comments: true
+
+
