@@ -1,10 +1,12 @@
 variable "k8s_worker_cpu_cores" {
     default = 12
     description = "CPU Core count"
+    type = number
 }
 variable "k8s_worker_memory" {
     default = 12288
     description = "RAM"
+    type = number
 }
 
 

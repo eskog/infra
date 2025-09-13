@@ -1,10 +1,12 @@
 variable "k8s_master_cpu_cores" {
     default = 8
     description = "CPU Core count"
+    type = number
 }
 variable "k8s_master_memory" {
     default = 8192
     description = "RAM"
+    type = number
 }
 
 
