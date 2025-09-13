@@ -33,5 +33,5 @@ updates:
     schedule: 
       interval: "daily"
     labels:
-      - "github-action"
+      - "github-actions"
       - "chore"
