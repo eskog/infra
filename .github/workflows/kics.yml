@@ -18,10 +18,9 @@ jobs:
       - name: KICS
         uses: checkmarx/kics-action@71454548efb714daa457caae25c01d64cc0be9d2
         with:
-          path: ansible,packer,terraform
+          path: ./
           token: ${{ secrets.PAT_TOKEN }}
           output_path: kics_results/
           enable_comments: true
-          ignore_on_exit: results
 
 
