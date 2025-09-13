@@ -1,0 +1,37 @@
+---
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/ansible"
+    schedule:
+      interval: "daily"
+    labels:
+      - "python"
+      - "chore"
+      - "dependencies"
+    commit-message:
+      prefix: "Chore:"
+    groups:
+      all-pip-deps:
+        applies-to: "version-updates"
+        patterns:
+        - '*'
+
+  - package-ecosystem: "terraform"
+    directory: "/terraform"
+    schedule:
+      interval: "daily"
+    labels:
+      - "terraform"
+      - "chore"
+      - "dependencies"
+    commit-message:
+      prefix: "Chore:"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: 
+      interval: "daily"
+    labels:
+      - "github-action"
+      - "chore"
