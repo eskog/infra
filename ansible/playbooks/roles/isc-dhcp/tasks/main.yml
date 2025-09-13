@@ -13,7 +13,7 @@
     path: /var/lib/dhcpd
     owner: dhcpd
     group: dhcpd
-    mode: '0755'
+    mode: '0750'
     state: directory
 
 - name: Ensure /var/lib/dhcpd/dhcpd.leases exists with correct ownership and permissions
@@ -22,7 +22,7 @@
     state: touch
     owner: dhcpd
     group: dhcpd
-    mode: '0644'
+    mode: '0640'
 
 - name: Configure dhcpd.conf
   ansible.builtin.template:
@@ -30,7 +30,7 @@
     dest: /etc/dhcp/dhcpd.conf
     owner: root
     group: root
-    mode: '0644'
+    mode: '0640'
   become: true
   notify: restart dhcpd
 
