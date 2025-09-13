@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "bastion" {
   # SECTION General Settings
 
   name = "devbox"
-  desc = "devbox"
+  description = "devbox"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name

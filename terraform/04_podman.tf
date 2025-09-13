@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "podman" {
   # SECTION General Settings
 
   name = "podman01"
-  desc = "podman01"
+  description = "podman01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name

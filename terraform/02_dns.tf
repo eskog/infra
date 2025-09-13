@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "dns" {
   # SECTION General Settings
 
   name = "dns01"
-  desc = "dns01"
+  description = "dns01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name
