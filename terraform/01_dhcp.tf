@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "dhcp" {
   # SECTION General Settings
 
   name = "dhcp01"
-  desc = "dhcp01"
+  description = "dhcp01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name
