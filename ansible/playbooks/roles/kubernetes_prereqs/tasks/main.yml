@@ -63,7 +63,7 @@
   ansible.builtin.file:
     path: /etc/containerd
     state: directory
-    mode: "644"
+    mode: "640"
 
 - name: Add Containerd configuration
   ansible.builtin.shell: /usr/bin/containerd config default > /etc/containerd/config.toml
@@ -116,7 +116,7 @@
   ansible.builtin.get_url:
     url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key
     dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
-    mode: "0644"
+    mode: "0640"
     force: true
   when: is_debian
 
