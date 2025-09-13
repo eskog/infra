@@ -19,7 +19,7 @@ jobs:
         uses: checkmarx/kics-action@v2.1.13
         with:
           path: ./
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           output_path: kics_results/
           enable_comments: true
 
