@@ -63,8 +63,18 @@ spec:
       serviceAccountName: nfs-client-provisioner
       securityContext:
         fsGroup: 65534        # NFS typically works with nobody:nogroup
+      automountServiceAccountToken: true #Apparenty required for NFS provision. not sure if true. Sonarqube not happy
       containers:
         - name: nfs-client-provisioner
+          resources:
+            requests:
+              cpu: 0.5
+              memory: "200Mi"
+              ephemeral-storage: "500Mi"
+            limits:
+              cpu: 0.8
+              memory: "250Mi"
+              ephemeral-storage: "2Gi"
           image: registry.k8s.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
           volumeMounts:
             - name: nfs-client-root
