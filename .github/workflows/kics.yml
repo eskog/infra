@@ -1,0 +1,30 @@
+name: KICS Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  kics_scan:
+    name: KICS Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: KICS
+        uses: checkmarx/kics-action@71454548efb714daa457caae25c01d64cc0be9d2
+        with:
+          path: ansible,packer,terraform
+          token: ${{ secrets.PAT_TOKEN }}
+          output_path: kics_results/
+          enable_comments: true
+          fail_on: high,medium,critical
+      - name: display kics results
+        run: |
+          cat kics_results/results.json
+
+
