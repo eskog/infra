@@ -23,5 +23,6 @@ jobs:
           output_path: kics_results/
           enable_comments: true
           ignore_on_exit: results
+          fail_on: high,medium
 
 
