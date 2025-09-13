@@ -13,6 +13,7 @@ variable "k8s_master_nodes" {
     hostname     = string
     vmid     = number
   }))
+  description = "Definition of the master nodes"
   default = {
     "k1-m1" = {
       hostname     = "k1-m1"
