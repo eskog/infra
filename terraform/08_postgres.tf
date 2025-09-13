@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "postgres" {
   # SECTION General Settings
 
   name = "db01"
-  desc = "db01"
+  description = "db01"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name

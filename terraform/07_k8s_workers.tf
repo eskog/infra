@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "k8s_workers" {
   # SECTION General Settings
 
   name = "${each.value.hostname}"
-  desc = "${each.value.hostname}"
+  description = "${each.value.hostname}"
   agent = 1  # <-- (Optional) Enable QEMU Guest Agent
 
   # FIXME Before deployment, set the correct target node name
