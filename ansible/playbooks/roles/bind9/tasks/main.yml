@@ -55,6 +55,7 @@
     src: /etc/named.conf.local
     dest: /etc/named.conf.local.bak
     remote_src: yes
+    mode: '0600'
   ignore_errors: yes
 
 - name: Deploy named.conf.local from template

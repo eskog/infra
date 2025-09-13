@@ -97,6 +97,7 @@
   copy:
     dest: /tmp/cilium-1.18.1.yml
     content: "{{ cilium_manifest.stdout }}"
+    mode: '0600'
   become: true
 
 - name: Apply Cilium manifest to cluster using kubectl

@@ -105,4 +105,5 @@ resource "proxmox_vm_qemu" "dhcp" {
 
 output "vm_ip_dhcp" {
   value = proxmox_vm_qemu.dhcp.default_ipv4_address
+  description = "Assigned IP Address"
 }
