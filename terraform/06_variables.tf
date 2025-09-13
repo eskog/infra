@@ -1,8 +1,12 @@
 variable "k8s_master_cpu_cores" {
     default = 8
+    description = "CPU Core count"
+    type = number
 }
 variable "k8s_master_memory" {
     default = 8192
+    description = "RAM"
+    type = number
 }
 
 
@@ -11,6 +15,7 @@ variable "k8s_master_nodes" {
     hostname     = string
     vmid     = number
   }))
+  description = "Definition of the master nodes"
   default = {
     "k1-m1" = {
       hostname     = "k1-m1"

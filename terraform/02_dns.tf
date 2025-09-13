@@ -105,4 +105,5 @@ resource "proxmox_vm_qemu" "dns" {
 
 output "vm_ip_dns" {
   value = proxmox_vm_qemu.dns.default_ipv4_address
+  description = "Assigned IP Address"
 }

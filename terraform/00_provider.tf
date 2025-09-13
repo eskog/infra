@@ -12,16 +12,19 @@ terraform {
 
 variable "PROXMOX_URL" {
   type = string
+  description = "URL of the proxmox node"
 }
 
 variable "PROXMOX_USER" {
   type      = string
   sensitive = true
+  description = "username for proxmox"
 }
 
 variable "PROXMOX_TOKEN" {
   type      = string
   sensitive = true
+  description = "API token of user"
 }
 
 variable "PUBLIC_SSH_KEY" {
@@ -29,10 +32,12 @@ variable "PUBLIC_SSH_KEY" {
   type      = string
   sensitive = true
   default = "~/.ssh/skog.network.pub"
+  description = "ssh key for VMs"
 }
 
 variable "pvenode" {
     type = string
+    description = "Target node for the creation of VMs"
 }
 
 provider "proxmox" {

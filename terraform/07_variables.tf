@@ -1,8 +1,12 @@
 variable "k8s_worker_cpu_cores" {
     default = 12
+    description = "CPU Core count"
+    type = number
 }
 variable "k8s_worker_memory" {
     default = 12288
+    description = "RAM"
+    type = number
 }
 
 
@@ -11,6 +15,7 @@ variable "k8s_worker_nodes" {
     hostname     = string
     vmid     = number
   }))
+  description = "Definition of the worker nodes"
   default = {
     "k1-w1" = {
       hostname     = "k1-w1"
