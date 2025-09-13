@@ -38,7 +38,7 @@
 - name: Disable SWAP in fstab
   ansible.builtin.replace:
     path: /etc/fstab
-    regexp: "^([^#].*?\\sswap\\s+sw\\s+.*)$"
+    regexp: "^([^#].*\\sswap\\s+.*)$"
     replace: "# \\1"
 
 - name: Ensure dnf-plugins-core is installed
