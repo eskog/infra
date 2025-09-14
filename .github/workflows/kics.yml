@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: KICS
         uses: checkmarx/kics-action@71454548efb714daa457caae25c01d64cc0be9d2
