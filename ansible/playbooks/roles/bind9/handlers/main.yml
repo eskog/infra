@@ -7,3 +7,7 @@
 - name: Reload firewalld
   ansible.builtin.command: firewall-cmd --reload
   become: true
+
+- name: Reload zones
+  ansible.builtin.command: rndc reload
+  become: true

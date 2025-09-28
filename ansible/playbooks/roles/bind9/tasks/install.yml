@@ -1,0 +1,110 @@
+---
+- name: Load vaulted variables
+  ansible.builtin.include_vars:
+    file: vars/vault.yml
+
+- name: Install bind package
+  ansible.builtin.dnf:
+    name: bind
+    state: present
+
+- name: Create /etc/named.conf
+  ansible.builtin.template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    owner: named
+    group: named
+    mode: '0640'
+
+- name: Create zone forward file from template
+  ansible.builtin.template:
+    src: zone_forward.j2
+    dest: "{{ zone_file_dir }}/{{ zone_forward_file }}"
+    owner: named
+    group: named
+    mode: '0640'
+  notify: Restart named
+
+- name: Create zone reverse file from template
+  template:
+    src: zone_reverse.j2
+    dest: "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+    owner: named
+    group: named
+    mode: '0640'
+  notify: Restart named
+
+- name: Ensure parent directory exists
+  ansible.builtin.file:
+    path: /var/log/named
+    state: directory
+    owner: named
+    group: named
+    mode: '0750'
+
+- name: Ensure query.log exists
+  ansible.builtin.file:
+    path: /var/log/named/query.log
+    state: touch
+    owner: named
+    group: named
+    mode: '0640'
+
+- name: Backup original named.conf.local if exists
+  ansible.builtin.copy:
+    src: /etc/named.conf.local
+    dest: /etc/named.conf.local.bak
+    remote_src: yes
+    mode: '0600'
+  ignore_errors: yes
+
+- name: Deploy named.conf.local from template
+  ansible.builtin.template:
+    src: named.conf.local.j2
+    dest: /etc/named.conf.local
+    owner: root
+    group: root
+    mode: '0640'
+  notify: Restart named
+
+- name: Ensure SELinux context for named log directory is set
+  ansible.builtin.command: >
+    semanage fcontext -a -t named_log_t "/var/log/named(/.*)?"
+  args:
+    creates: /etc/selinux/targeted/contexts/files/file_contexts.local
+  when: ansible_selinux.status == "enabled"
+  become: true
+
+- name: Restore SELinux context on /var/log/named
+  ansible.builtin.command: >
+    restorecon -Rv /var/log/named
+  when: ansible_selinux.status == "enabled"
+  become: true
+
+- name: Ensure named is enabled and started
+  ansible.builtin.service:
+    name: named
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Allow DNS over TCP in firewalld
+  ansible.posix.firewalld:
+    port: 53/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+  notify: Reload firewalld
+
+- name: Allow DNS over UDP in firewalld
+  ansible.posix.firewalld:
+    port: 53/udp
+    permanent: true
+    state: enabled
+    immediate: true
+  notify: Reload firewalld
+
+
+- name: Set SELinux context for zone files
+  ansible.builtin.command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+

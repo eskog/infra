@@ -12,3 +12,4 @@ $TTL 86400
 {{ dhcp_server_ip.split('.')[-1] }}.{{ dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ domain_name }}.
 
 
+$INCLUDE "/var/named/db.10.0.static"

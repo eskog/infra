@@ -1,0 +1,10 @@
+---
+- name: Update DNS records
+  hosts: dns
+  gather_facts: yes
+  become: yes
+
+  roles:
+    - role: bind9
+      vars:
+        dns_task_file: updates.yml
