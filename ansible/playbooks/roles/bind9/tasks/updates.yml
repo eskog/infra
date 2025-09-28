@@ -1,0 +1,19 @@
+---
+
+- name: Create static zone forward file from template
+  ansible.builtin.template:
+    src: zone_forward_static.j2
+    dest: "{{ zone_file_dir }}/{{ zone_forward_file_static}}"
+    owner: named
+    group: named
+    mode: '0640'
+  notify: reload zones
+
+- name: Create static zone reverse file from template
+  template:
+    src: zone_reverse_static.j2
+    dest: "{{ zone_file_dir }}/{{ zone_reverse_file_static }}"
+    owner: named
+    group: named
+    mode: '0640'
+  notify: reload zones

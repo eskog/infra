@@ -1,0 +1,4 @@
+;--- Static A recods ---
+{% for rec in dns_static_records %}
+{{ rec.hostname }}                   A       {{rec.ip}}
+{% endfor %}

@@ -1,0 +1,18 @@
+; ---- Reverse zone file ----
+
+{% set zones = {} %}
+{% for rec in dns_static_records %}
+  {% set subnet = rec.ip.split('.')[1] ~ '.' ~ rec.ip.split('.')[2] %}
+  {% if zones[subnet] is not defined %}
+    {% set _ = zones.update({ subnet: [] }) %}
+  {% endif %}
+  {% set _ = zones[subnet].append(rec) %}
+{% endfor %}
+
+{% for subnet, records in zones.items() | sort %}
+$ORIGIN {{ subnet }}.10.in-addr.arpa.
+{% for r in records | sort(attribute='ip') %}
+{{ r.ip.split('.')[-1] }}    PTR    {{ r.hostname }}.lab.skog.network.
+{% endfor %}
+
+{% endfor %}
