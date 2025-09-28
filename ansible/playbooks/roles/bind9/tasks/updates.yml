@@ -16,4 +16,4 @@
     owner: named
     group: named
     mode: '0640'
-  notify: reload zones
+  notify: Reload zones
