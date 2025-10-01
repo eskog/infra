@@ -1,7 +1,7 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 - name: Restart PostgreSQL
-  systemd:
+  ansible.builtin.systemd:
     name: postgresql
     state: restarted
 

@@ -1,5 +1,5 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # vars file for kubernetes_masters
-cilium_version: v1.18.1
-cilium_manifest: "{{ role_path }}/files/cilium-1.18.1.yml"
+kubernetes_masters_cilium_version: v1.18.1 # TODO: Is this even used anymore?
+kubernetes_masters_cilium_manifest: "{{ role_path }}/files/cilium-1.18.1.yml"

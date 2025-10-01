@@ -1,8 +1,8 @@
 ---
 - name: Setup ISC-DHCP server
-  gather_facts: yes
+  gather_facts: true
   hosts: dhcp
-  become: yes
+  become: true
 
   roles:
     - isc-dhcp
