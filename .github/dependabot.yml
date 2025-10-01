@@ -3,6 +3,8 @@ version: 2
 updates:
   - package-ecosystem: "uv"
     directory: "/ansible"
+    assignees:
+      - "eskog"
     schedule:
       interval: "daily"
     labels:
@@ -19,6 +21,8 @@ updates:
 
   - package-ecosystem: "terraform"
     directory: "/terraform"
+    assignees:
+      - "eskog"
     schedule:
       interval: "daily"
     labels:
@@ -30,6 +34,8 @@ updates:
 
   - package-ecosystem: "github-actions"
     directory: "/"
+    assignees:
+      - "eskog"
     schedule: 
       interval: "daily"
     labels:
