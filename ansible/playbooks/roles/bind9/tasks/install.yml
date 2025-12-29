@@ -53,7 +53,7 @@
 - name: Check if named.conf.local exists
   ansible.builtin.stat:
     path: /etc/named.conf.local
-  register: named_conf_local
+  register: bind9_named_conf_local
 
 - name: Backup original named.conf.local if exists
   ansible.builtin.copy:
@@ -61,7 +61,7 @@
     dest: /etc/named.conf.local.bak
     remote_src: true
     mode: '0600'
-  when: named_conf_local.stat.exists
+  when: bind9_named_conf_local.stat.exists
 
 - name: Deploy named.conf.local from template
   ansible.builtin.template:
