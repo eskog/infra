@@ -1,3 +1,3 @@
 ---
 - name: Include the selected dns task set
-  include_tasks: "{{ dns_task_file | default('install.yml') }}"
+  ansible.builtin.include_tasks: "{{ bind9_dns_task_file | default('install.yml') }}"

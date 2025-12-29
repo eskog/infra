@@ -17,7 +17,7 @@
     timeout: 5
 
 - name: Join cluster
-  ansible.builtin.shell: "{{ hostvars['k1-m1.lab.skog.network']['join_command'] }} >> node_joined.log"
+  ansible.builtin.shell: "{{ hostvars['k1-m1.lab.skog.network']['kubernetes_masters_join_command'] }} >> node_joined.log"
   args:
     chdir: /home/skogen
     creates: node_joined.log

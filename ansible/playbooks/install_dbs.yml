@@ -1,8 +1,8 @@
 ---
 - name: Setup Postgres
-  gather_facts: yes
+  gather_facts: true
   hosts: databases
-  become: yes
+  become: true
 
   roles:
     - postgres

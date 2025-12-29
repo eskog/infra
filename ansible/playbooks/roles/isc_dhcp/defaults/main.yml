@@ -1,0 +1,9 @@
+isc_dhcp_dns_servers:
+  - 10.0.29.12
+
+isc_dhcp_ddns_key_name: "dhcp_update"
+
+isc_dhcp_subnets: "{{ range(21, 30) | list }}"
+
+isc_dhcp_range_start: 101
+isc_dhcp_range_end: 250

@@ -32,10 +32,10 @@
     group: root
     mode: '0640'
   become: true
-  notify: restart dhcpd
+  notify: Restart dhcpd
 
 - name: Enable and start DHCP server
   ansible.builtin.systemd:
     name: dhcpd
-    enabled: yes
+    enabled: true
     state: started

@@ -6,16 +6,16 @@
 //
 
 options {
-        listen-on port {{ listen_on_port }} { {% for ip in listen_on_ips %}{{ ip }}; {% endfor %} };
-        listen-on-v6 port {{ listen_on_v6_port }} { {% for ip6 in listen_on_v6_ips %}{{ ip6 }}; {% endfor %} };
-        directory       "{{ zone_file_dir }}";
-        dump-file       "{{ dump_file }}";
-        statistics-file "{{ statistics_file }}";
-        memstatistics-file "{{ memstatistics_file }}";
-        secroots-file   "{{ secroots_file }}";
-        recursing-file  "{{ recursing_file }}";
-        allow-query     { {% for net in allow_query %}{{ net }}; {% endfor %} };
-        allow-update { key "{{ allow_update_key }}"; };
+        listen-on port {{ bind9_listen_on_port }} { {% for ip in bind9_listen_on_ips %}{{ ip }}; {% endfor %} };
+        listen-on-v6 port {{ bind9_listen_on_v6_port }} { {% for ip6 in bind9_listen_on_v6_ips %}{{ ip6 }}; {% endfor %} };
+        directory       "{{ bind9_zone_file_dir }}";
+        dump-file       "{{ bind9_dump_file }}";
+        statistics-file "{{ bind9_statistics_file }}";
+        memstatistics-file "{{ bind9_memstatistics_file }}";
+        secroots-file   "{{ bind9_secroots_file }}";
+        recursing-file  "{{ bind9_recursing_file }}";
+        allow-query     { {% for net in bind9_allow_query %}{{ net }}; {% endfor %} };
+        allow-update { key "{{ bind9_allow_update_key }}"; };
 
         /*
          - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.
@@ -27,27 +27,27 @@ options {
            attacks. Implementing BCP38 within your network would greatly
            reduce such attack surface
         */
-        recursion {{ recursion }};
+        recursion {{ bind9_recursion }};
         forward only;
         forwarders {
-                {% for forwarder in forwarders %}{{ forwarder }}; {% endfor %}
+                {% for forwarder in bind9_forwarders %}{{ forwarder }}; {% endfor %}
         };
-        dnssec-validation {{ dnssec_validation }};
-        dnssec-enable {{ dnssec_enable }};
+        dnssec-validation {{ bind9_dnssec_validation }};
+        dnssec-enable {{ bind9_dnssec_enable }};
 
-        managed-keys-directory "{{ managed_keys_directory }}";
-        geoip-directory "{{ geoip_directory }}";
+        managed-keys-directory "{{ bind9_managed_keys_directory }}";
+        geoip-directory "{{ bind9_geoip_directory }}";
 
-        pid-file "{{ pid_file }}";
-        session-keyfile "{{ session_keyfile }}";
+        pid-file "{{ bind9_pid_file }}";
+        session-keyfile "{{ bind9_session_keyfile }}";
 
         /* https://fedoraproject.org/wiki/Changes/CryptoPolicy */
-        include "{{ include_crypto_policy }}";
+        include "{{ bind9_include_crypto_policy }}";
 };
 
 logging {
   channel update_debug {
-    file "{{ log_named_ddns }}";
+    file "{{ bind9_log_named_ddns }}";
     severity debug 3;
     print-severity yes;
     print-time yes;
@@ -66,7 +66,7 @@ logging {
   };
 
   channel querylog {
-    file "{{ log_querylog }}";
+    file "{{ bind9_log_querylog }}";
     severity info;
     print-time yes;
   };
@@ -75,9 +75,9 @@ logging {
 
 zone "." IN {
         type hint;
-        file "{{ zone_root_file }}";
+        file "{{ bind9_zone_root_file }}";
 };
 
-include "{{ include_rfc1912_zones }}";
-include "{{ include_root_key }}";
-include "{{ include_conf_local }}";
+include "{{ bind9_include_rfc1912_zones }}";
+include "{{ bind9_include_root_key }}";
+include "{{ bind9_include_conf_local }}";

@@ -1,15 +1,15 @@
-$ORIGIN {{ domain_name }}.
+$ORIGIN {{ bind9_domain_name }}.
 $TTL 86400
-@   IN  SOA  dns01.{{ domain_name }}. admin.{{ domain_name }}. (
+@   IN  SOA  dns01.{{ bind9_domain_name }}. admin.{{ bind9_domain_name }}. (
         10 ; Serial
         3600       ; Refresh
         1800       ; Retry
         604800     ; Expire
         86400 )    ; Minimum TTL
 ;
-@       IN  NS      dns01.{{ domain_name }}.
-dns01     IN  A       {{ dns_server_ip }}
-dhcp01    IN  A       {{ dhcp_server_ip }}
+@       IN  NS      dns01.{{ bind9_domain_name }}.
+dns01     IN  A       {{ bind9_dns_server_ip }}
+dhcp01    IN  A       {{ bind9_dhcp_server_ip }}
 
 
 $INCLUDE "/var/named/db.lab.skog.network.static"

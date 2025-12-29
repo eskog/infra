@@ -1,10 +1,11 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 - name: Restart PostgreSQL
-  systemd:
+  ansible.builtin.systemd:
     name: postgresql
     state: restarted
 
 - name: Reload firewalld
   become: true
   ansible.builtin.command: firewall-cmd --reload
+  changed_when: true
