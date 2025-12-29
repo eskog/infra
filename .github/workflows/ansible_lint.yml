@@ -20,5 +20,5 @@ jobs:
           #gh_action_ref: "<version - e.g. `v25.5.0`>" # Not recommended for non-composite action use
           setup_python: "true"
           python_version: "3.14"
-          working_directory: "/ansible"
-          requirements_file: "/ansible/uv.lock"
+          working_directory: "ansible"
+          requirements_file: "ansible/uv.lock"
