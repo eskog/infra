@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@main # or vX.X.X version
+        uses: ansible/ansible-lint@v25.12.2
         # optional (see below):
         with:
           args: ""
