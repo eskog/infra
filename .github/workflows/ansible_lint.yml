@@ -15,6 +15,7 @@ jobs:
       - name: Run ansible-lint
         uses: ansible/ansible-lint@a2bc8b8b13a80802215856c56823d85007d3baf5
         with:
-          setup_python: "true"
+          setup_python: true
           python_version: "3.14"
           working_directory: "ansible"
+
