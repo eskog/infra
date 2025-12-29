@@ -114,4 +114,5 @@
 
 - name: Set SELinux context for zone files
   ansible.builtin.command: restorecon -v "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}" "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}"
-  changed_when: true
+  register: bind9_restorecon_zones
+  changed_when: "'Relabeled' in bind9_restorecon_zones.stdout"
