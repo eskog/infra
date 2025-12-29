@@ -1,7 +1,7 @@
-# SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT
 ---
 # tasks file for podman
-- name: Install poman package
+- name: Install podman package
   ansible.builtin.dnf:
     name: podman
     state: present
