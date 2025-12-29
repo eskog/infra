@@ -1,0 +1,5 @@
+---
+collections:
+  - name: ansible.posix.firewalld
+  - name: community.general.modprobe
+  - name: ansible-posix.selinux
