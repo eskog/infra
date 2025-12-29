@@ -93,7 +93,7 @@
     --set hostPort.enabled=true
     --set externalIPs.enabled=true
   register: kubernetes_masters_cilium_manifest
-  changed_when: true
+  changed_when: false
 
 - name: Write Cilium manifest to file
   ansible.builtin.copy:

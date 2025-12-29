@@ -19,7 +19,7 @@
 - name: Create zone forward file from template
   ansible.builtin.template:
     src: zone_forward.j2
-    dest: "{{ zone_file_dir }}/{{ zone_forward_file }}"
+    dest: "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}"
     owner: named
     group: named
     mode: '0640'
@@ -28,7 +28,7 @@
 - name: Create zone reverse file from template
   ansible.builtin.template:
     src: zone_reverse.j2
-    dest: "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+    dest: "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}"
     owner: named
     group: named
     mode: '0640'
@@ -83,9 +83,10 @@
 - name: Restore SELinux context on /var/log/named
   ansible.builtin.command: >
     restorecon -Rv /var/log/named
+  register: bind9_restorecon_log
   when: ansible_selinux.status == "enabled"
   become: true
-  changed_when: true
+  changed_when: "'Relabeled' in bind9_restorecon_log.stdout"
 
 - name: Ensure named is enabled and started
   ansible.builtin.service:
@@ -112,5 +113,5 @@
 
 
 - name: Set SELinux context for zone files
-  ansible.builtin.command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+  ansible.builtin.command: restorecon -v "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}" "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}"
   changed_when: true

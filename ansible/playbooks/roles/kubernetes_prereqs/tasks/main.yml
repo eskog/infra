@@ -46,6 +46,7 @@
   ansible.builtin.dnf:
     name: dnf-plugins-core
     state: present
+  when: kubernetes_prereqs_is_rhel
 
 - name: Add Docker CE repository
   ansible.builtin.command: >
