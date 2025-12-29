@@ -1,7 +1,7 @@
-# SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT
 galaxy_info:
   author: Emil Skog
-  description: "Installs specific to workers, and joining cluster"
+  description: "Configures Kubernetes worker nodes and joins them to the cluster"
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
