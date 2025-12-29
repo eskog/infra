@@ -1,15 +1,15 @@
 $ORIGIN 0.10.in-addr.arpa.
 $TTL 86400
-@   IN  SOA  dns01.{{ domain_name }}. admin.{{ domain_name }}. (
+@   IN  SOA  dns01.{{ bind9_domain_name }}. admin.{{ bind9_domain_name }}. (
         2025060840 ; Serial
         3600       ; Refresh
         1800       ; Retry
         604800     ; Expire
         86400 )    ; Minimum TTL
 ;
-@       IN  NS      dns01.{{ domain_name }}.
-{{ dns_server_ip.split('.')[-1] }}.{{ dns_server_ip.split('.')[-2] }}      IN  PTR     dns01.{{ domain_name }}.
-{{ dhcp_server_ip.split('.')[-1] }}.{{ dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ domain_name }}.
+@       IN  NS      dns01.{{ bind9_domain_name }}.
+{{ bind9_dns_server_ip.split('.')[-1] }}.{{ bind9_dns_server_ip.split('.')[-2] }}      IN  PTR     dns01.{{ bind9_domain_name }}.
+{{ bind9_dhcp_server_ip.split('.')[-1] }}.{{ bind9_dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ bind9_domain_name }}.
 
 
 $INCLUDE "/var/named/db.10.0.static"

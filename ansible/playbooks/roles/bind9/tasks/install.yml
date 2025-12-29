@@ -19,16 +19,16 @@
 - name: Create zone forward file from template
   ansible.builtin.template:
     src: zone_forward.j2
-    dest: "{{ zone_file_dir }}/{{ zone_forward_file }}"
+    dest: "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}"
     owner: named
     group: named
     mode: '0640'
   notify: Restart named
 
 - name: Create zone reverse file from template
-  template:
+  ansible.builtin.template:
     src: zone_reverse.j2
-    dest: "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+    dest: "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}"
     owner: named
     group: named
     mode: '0640'
@@ -50,13 +50,18 @@
     group: named
     mode: '0640'
 
+- name: Check if named.conf.local exists
+  ansible.builtin.stat:
+    path: /etc/named.conf.local
+  register: bind9_named_conf_local
+
 - name: Backup original named.conf.local if exists
   ansible.builtin.copy:
     src: /etc/named.conf.local
     dest: /etc/named.conf.local.bak
-    remote_src: yes
+    remote_src: true
     mode: '0600'
-  ignore_errors: yes
+  when: bind9_named_conf_local.stat.exists
 
 - name: Deploy named.conf.local from template
   ansible.builtin.template:
@@ -78,15 +83,17 @@
 - name: Restore SELinux context on /var/log/named
   ansible.builtin.command: >
     restorecon -Rv /var/log/named
+  register: bind9_restorecon_log
   when: ansible_selinux.status == "enabled"
   become: true
+  changed_when: "'Relabeled' in bind9_restorecon_log.stdout"
 
 - name: Ensure named is enabled and started
   ansible.builtin.service:
     name: named
-    enabled: yes
+    enabled: true
     state: started
-  become: yes
+  become: true
 
 - name: Allow DNS over TCP in firewalld
   ansible.posix.firewalld:
@@ -106,5 +113,6 @@
 
 
 - name: Set SELinux context for zone files
-  ansible.builtin.command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
-
+  ansible.builtin.command: restorecon -v "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}" "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}"
+  register: bind9_restorecon_zones
+  changed_when: "'Relabeled' in bind9_restorecon_zones.stdout"

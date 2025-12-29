@@ -1,4 +1,4 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # tasks file for kubernetes_masters
 - name: Open required master ports in firewalld
@@ -17,13 +17,13 @@
 
 - name: Initialize Kubernetes cluster
   ansible.builtin.command: kubeadm init --pod-network-cidr=10.244.0.0/16
-  register: kubeadm_output
+  register: kubernetes_masters_kubeadm_output
   args:
     creates: /etc/kubernetes/admin.conf
 
 - name: Save kubeconfig for root user
   ansible.builtin.copy:
-    content: "{{ kubeadm_output.stdout_lines | join('\n') }}"
+    content: "{{ kubernetes_masters_kubeadm_output.stdout_lines | join('\n') }}"
     dest: /root/kubeadm_init_output.txt
     mode: "0600"
 
@@ -47,21 +47,21 @@
 #   - Change kubeconfig permissions
 
 - name: Download Helm binary
-  get_url:
+  ansible.builtin.get_url:
     url: https://get.helm.sh/helm-v3.18.6-linux-amd64.tar.gz
     dest: /tmp/helm-v3.18.6-linux-amd64.tar.gz
     mode: '0640'
   become: true
 
 - name: Extract Helm binary
-  unarchive:
+  ansible.builtin.unarchive:
     src: /tmp/helm-v3.18.6-linux-amd64.tar.gz
     dest: /tmp
     remote_src: true
   become: true
 
 - name: Move Helm into /usr/local/bin
-  copy:
+  ansible.builtin.copy:
     src: /tmp/linux-amd64/helm
     dest: /usr/local/bin/helm
     mode: '0750'
@@ -69,15 +69,16 @@
   become: true
 
 - name: Add Cilium Helm repo
-  command: /usr/local/bin/helm repo add cilium https://helm.cilium.io/
+  ansible.builtin.command: /usr/local/bin/helm repo add cilium https://helm.cilium.io/
   args:
     creates: ~/.cache/helm/repository/cilium-index.yaml
 
 - name: Update Helm repos
-  command: /usr/local/bin/helm repo update
+  ansible.builtin.command: /usr/local/bin/helm repo update
+  changed_when: true
 
 - name: Generate Cilium manifest with Helm
-  command: >
+  ansible.builtin.command: >
     /usr/local/bin/helm template cilium cilium/cilium
     --namespace kube-system
     --version 1.18.1
@@ -91,24 +92,27 @@
     --set nodePort.enabled=true
     --set hostPort.enabled=true
     --set externalIPs.enabled=true
-  register: cilium_manifest
+  register: kubernetes_masters_cilium_manifest
+  changed_when: false
 
 - name: Write Cilium manifest to file
-  copy:
+  ansible.builtin.copy:
     dest: /tmp/cilium-1.18.1.yml
-    content: "{{ cilium_manifest.stdout }}"
+    content: "{{ kubernetes_masters_cilium_manifest.stdout }}"
     mode: '0600'
   become: true
 
 - name: Apply Cilium manifest to cluster using kubectl
-  command: kubectl apply -f /tmp/cilium-1.18.1.yml --kubeconfig /etc/kubernetes/admin.conf
+  ansible.builtin.command: kubectl apply -f /tmp/cilium-1.18.1.yml --kubeconfig /etc/kubernetes/admin.conf
   become: true
+  changed_when: true
 
 
 - name: Get join command
-  ansible.builtin.shell: kubeadm token create --print-join-command
-  register: join_command_raw
+  ansible.builtin.command: kubeadm token create --print-join-command
+  register: kubernetes_masters_join_command_raw
+  changed_when: true
 
 - name: Set join command
   ansible.builtin.set_fact:
-    join_command: "{{ join_command_raw.stdout_lines[0] }}"
+    kubernetes_masters_join_command: "{{ kubernetes_masters_join_command_raw.stdout_lines[0] }}"

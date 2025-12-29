@@ -1,11 +1,11 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 - name: Load vaulted variables
   ansible.builtin.include_vars:
     file: vars/vault.yml
 
 - name: Ensure SELinux is enabled and enforcing
-  selinux:
+  ansible.posix.selinux:
     policy: targeted
     state: enforcing
 
@@ -19,25 +19,25 @@
   notify: Reload firewalld
 
 - name: Install packages server
-  dnf:
-    name: 
+  ansible.builtin.dnf:
+    name:
       - postgresql-server
       - python3-psycopg2
     state: present
 
 - name: Initialize PostgreSQL database
-  command: postgresql-setup --initdb
+  ansible.builtin.command: postgresql-setup --initdb
   args:
     creates: /var/lib/pgsql/data/PG_VERSION
 
 - name: Enable and start PostgreSQL
-  systemd:
+  ansible.builtin.systemd:
     name: postgresql
     enabled: true
     state: started
 
-- name: Allow connections from {{ allowed_network }}
-  template:
+- name: Allow connections from {{ postgres_allowed_network }}
+  ansible.builtin.template:
     src: pg_hba.conf.j2
     dest: /var/lib/pgsql/data/pg_hba.conf
     owner: postgres
@@ -46,18 +46,18 @@
   notify: Restart PostgreSQL
 
 - name: Configure listen_addresses to '*'
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /var/lib/pgsql/data/postgresql.conf
     regexp: '^#?listen_addresses\s*='
     line: "listen_addresses = '*'"
-    backup: yes
+    backup: true
   notify: Restart PostgreSQL
 
 - name: Create admin PostgreSQL user
   become: true
   become_user: postgres
-  postgresql_user:
+  community.postgresql.postgresql_user:
     name: "{{ postgres_admin_user }}"
     password: "{{ postgres_admin_password }}"
-    encrypted: yes
+    encrypted: true
     role_attr_flags: "CREATEDB,CREATEROLE,LOGIN"
