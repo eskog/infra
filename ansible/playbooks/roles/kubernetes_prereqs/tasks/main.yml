@@ -34,6 +34,7 @@
 - name: Disable swap if it is enabled
   ansible.builtin.command: swapoff -a
   when: kubernetes_prereqs_swap_status.stdout != ""
+  changed_when: true
 
 - name: Disable SWAP in fstab
   ansible.builtin.replace:
@@ -67,6 +68,8 @@
 
 - name: Add Containerd configuration
   ansible.builtin.shell: /usr/bin/containerd config default > /etc/containerd/config.toml
+  args:
+    creates: /etc/containerd/config.toml
 
 - name: Configuring the systemd cgroup driver for Containerd
   ansible.builtin.lineinfile:

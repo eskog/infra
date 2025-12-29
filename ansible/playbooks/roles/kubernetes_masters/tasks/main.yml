@@ -75,6 +75,7 @@
 
 - name: Update Helm repos
   ansible.builtin.command: /usr/local/bin/helm repo update
+  changed_when: true
 
 - name: Generate Cilium manifest with Helm
   ansible.builtin.command: >
@@ -92,6 +93,7 @@
     --set hostPort.enabled=true
     --set externalIPs.enabled=true
   register: kubernetes_masters_cilium_manifest
+  changed_when: true
 
 - name: Write Cilium manifest to file
   ansible.builtin.copy:
@@ -103,11 +105,13 @@
 - name: Apply Cilium manifest to cluster using kubectl
   ansible.builtin.command: kubectl apply -f /tmp/cilium-1.18.1.yml --kubeconfig /etc/kubernetes/admin.conf
   become: true
+  changed_when: true
 
 
 - name: Get join command
   ansible.builtin.command: kubeadm token create --print-join-command
   register: kubernetes_masters_join_command_raw
+  changed_when: true
 
 - name: Set join command
   ansible.builtin.set_fact:

@@ -50,13 +50,17 @@
     group: named
     mode: '0640'
 
+- name: Check if named.conf.local exists
+  ansible.builtin.stat:
+    path: /etc/named.conf.local
+
 - name: Backup original named.conf.local if exists
   ansible.builtin.copy:
     src: /etc/named.conf.local
     dest: /etc/named.conf.local.bak
     remote_src: true
     mode: '0600'
-  ignore_errors: true
+  when: named_conf_local.stat.exists
 
 - name: Deploy named.conf.local from template
   ansible.builtin.template:
@@ -80,6 +84,7 @@
     restorecon -Rv /var/log/named
   when: ansible_selinux.status == "enabled"
   become: true
+  changed_when: true
 
 - name: Ensure named is enabled and started
   ansible.builtin.service:
@@ -107,3 +112,4 @@
 
 - name: Set SELinux context for zone files
   ansible.builtin.command: restorecon -v "{{ zone_file_dir }}/{{ zone_forward_file }}" "{{ zone_file_dir }}/{{ zone_reverse_file }}"
+  changed_when: true

@@ -1,16 +1,16 @@
 key dhcp_update {
     algorithm hmac-sha256;
-    secret "{{ TSIG_key }}";
+    secret "{{ bind9_TSIG_key }}";
 };
 
 zone {{ domain_name }} IN {
     type master;
-    file "{{ zone_file_dir }}/{{ zone_forward_file }}";
+    file "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}";
     allow-update { key dhcp_update; };
 };
 
 zone 0.10.in-addr.arpa IN {
     type master;
-    file "{{ zone_file_dir }}/{{ zone_reverse_file }}";
+    file "{{ bind9_zone_file_dir }}/{{ bind9_zone_reverse_file }}";
     allow-update { key dhcp_update; };
 };

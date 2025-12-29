@@ -1,52 +1,49 @@
 ---
-domain_name: lab.skog.network
-zone_file_dir: /var/named
-zone_forward_file: "db.{{ domain_name }}"
-zone_reverse_file: "db.10.0"
-zone_forward_file_static: "db.{{ domain_name }}.static"
-zone_reverse_file_static: "db.10.0.static"
-dns_server_ip: "{{ ansible_default_ipv4.address | default('192.168.1.53') }}"
-dhcp_server_ip: "10.0.29.254"
+bind9_domain_name: lab.skog.network
+bind9_zone_file_dir: /var/named
+bind9_zone_forward_file: "db.{{ domain_name }}"
+bind9_zone_reverse_file: "db.10.0"
+bind9_zone_forward_file_static: "db.{{ domain_name }}.static"
+bind9_zone_reverse_file_static: "db.10.0.static"
+bind9_dns_server_ip: "{{ ansible_default_ipv4.address | default('192.168.1.53') }}"
+bind9_dhcp_server_ip: "10.0.29.254"
 
 
-listen_on_port: 53
-listen_on_ips:
+bind9_listen_on_port: 53
+bind9_listen_on_ips:
   - 127.0.0.1
   - 10.0.29.12
 
-listen_on_v6_port: 53
-listen_on_v6_ips:
+bind9_listen_on_v6_port: 53
+bind9_listen_on_v6_ips:
   - ::1
 
-dump_file: /var/named/data/cache_dump.db
-statistics_file: /var/named/data/named_stats.txt
-memstatistics_file: /var/named/data/named_mem_stats.txt
-secroots_file: /var/named/data/named.secroots
-recursing_file: /var/named/data/named.recursing
+bind9_dump_file: /var/named/data/cache_dump.db
+bind9_statistics_file: /var/named/data/named_stats.txt
+bind9_memstatistics_file: /var/named/data/named_mem_stats.txt
+bind9_secroots_file: /var/named/data/named.secroots
+bind9_recursing_file: /var/named/data/named.recursing
 
-allow_query:
+bind9_allow_query:
   - any
 
-allow_update_key: dhcp_update
+bind9_allow_update_key: dhcp_update
 
-recursion: "yes"
-forwarders:
+bind9_recursion: "yes"
+bind9_forwarders:
   - 10.0.29.1
 
-dnssec_validation: "no"
-dnssec_enable: "no"
+bind9_dnssec_validation: "no"
+bind9_dnssec_enable: "no"
 
-managed_keys_directory: /var/named/dynamic
-geoip_directory: /usr/share/GeoIP
-
-pid_file: /run/named/named.pid
-session_keyfile: /run/named/session.key
-include_crypto_policy: /etc/crypto-policies/back-ends/bind.config
-
-log_named_ddns: /var/named/data/named_ddns.log
-log_querylog: /var/log/named/query.log
-
-zone_root_file: named.ca
-include_rfc1912_zones: /etc/named.rfc1912.zones
-include_root_key: /etc/named.root.key
-include_conf_local: /etc/named.conf.local
+bind9_managed_keys_directory: /var/named/dynamic
+bind9_geoip_directory: /usr/share/GeoIP
+bind9_pid_file: /run/named/named.pid
+bind9_session_keyfile: /run/named/session.key
+bind9_include_crypto_policy: /etc/crypto-policies/back-ends/bind.config
+bind9_log_named_ddns: /var/named/data/named_ddns.log
+bind9_log_querylog: /var/log/named/query.log
+bind9_zone_root_file: named.ca
+bind9_include_rfc1912_zones: /etc/named.rfc1912.zones
+bind9_include_root_key: /etc/named.root.key
+bind9_include_conf_local: /etc/named.conf.local
