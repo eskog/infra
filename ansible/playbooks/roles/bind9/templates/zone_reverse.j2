@@ -9,7 +9,7 @@ $TTL 86400
 ;
 @       IN  NS      dns01.{{ bind9_domain_name }}.
 {{ bind9_dns_server_ip.split('.')[-1] }}.{{ bind9_dns_server_ip.split('.')[-2] }}      IN  PTR     dns01.{{ bind9_domain_name }}.
-{{ bind9_dhcp_server_ip.split('.')[-1] }}.{{ bind9_dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ dbind9_omain_name }}.
+{{ bind9_dhcp_server_ip.split('.')[-1] }}.{{ bind9_dhcp_server_ip.split('.')[-2] }}      IN  PTR     dhcp01.{{ bind9_domain_name }}.
 
 
 $INCLUDE "/var/named/db.10.0.static"

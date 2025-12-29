@@ -3,7 +3,7 @@ key dhcp_update {
     secret "{{ bind9_TSIG_key }}";
 };
 
-zone {{ domain_name }} IN {
+zone {{ bind9_domain_name }} IN {
     type master;
     file "{{ bind9_zone_file_dir }}/{{ bind9_zone_forward_file }}";
     allow-update { key dhcp_update; };

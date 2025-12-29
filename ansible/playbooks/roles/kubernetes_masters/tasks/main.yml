@@ -115,4 +115,4 @@
 
 - name: Set join command
   ansible.builtin.set_fact:
-    kubernetes_masters_join_command: "{{ kubernets_masters_join_command_raw.stdout_lines[0] }}"
+    kubernetes_masters_join_command: "{{ kubernetes_masters_join_command_raw.stdout_lines[0] }}"

@@ -1,9 +1,9 @@
 ---
 bind9_domain_name: lab.skog.network
 bind9_zone_file_dir: /var/named
-bind9_zone_forward_file: "db.{{ domain_name }}"
+bind9_zone_forward_file: "db.{{ bind9_domain_name }}"
 bind9_zone_reverse_file: "db.10.0"
-bind9_zone_forward_file_static: "db.{{ domain_name }}.static"
+bind9_zone_forward_file_static: "db.{{ bind9_domain_name }}.static"
 bind9_zone_reverse_file_static: "db.10.0.static"
 bind9_dns_server_ip: "{{ ansible_default_ipv4.address | default('192.168.1.53') }}"
 bind9_dhcp_server_ip: "10.0.29.254"

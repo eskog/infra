@@ -53,6 +53,7 @@
 - name: Check if named.conf.local exists
   ansible.builtin.stat:
     path: /etc/named.conf.local
+  register: named_conf_local
 
 - name: Backup original named.conf.local if exists
   ansible.builtin.copy:

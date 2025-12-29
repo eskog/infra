@@ -36,7 +36,7 @@
     enabled: true
     state: started
 
-- name: Allow connections from {{ allowed_network }}
+- name: Allow connections from {{ postgres_allowed_network }}
   ansible.builtin.template:
     src: pg_hba.conf.j2
     dest: /var/lib/pgsql/data/pg_hba.conf

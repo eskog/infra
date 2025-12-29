@@ -2,7 +2,7 @@
 galaxy_info:
   author: Emil Skog
   description: Install and configure ISC DHCP server on Rocky Linux
-  license: "None"
+  license: "MIT"
   min_ansible_version: "2.9"
 
 dependencies: []

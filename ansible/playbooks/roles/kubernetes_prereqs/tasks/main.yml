@@ -192,5 +192,4 @@
     - 8472/udp
     - 4240/tcp
     - 2379-2380/tcp
-
-  when: ansible_facts['os_family'] == 'RedHat'
+  when: kubernetes_prereqs_is_rhel
