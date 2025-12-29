@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@a2bc8b8
+        uses: ansible/ansible-lint@a2bc8b8b13a80802215856c56823d85007d3baf5
         # optional (see below):
         with:
           args: ""
