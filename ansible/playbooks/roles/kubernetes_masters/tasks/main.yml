@@ -105,13 +105,14 @@
 - name: Apply Cilium manifest to cluster using kubectl
   ansible.builtin.command: kubectl apply -f /tmp/cilium-1.18.1.yml --kubeconfig /etc/kubernetes/admin.conf
   become: true
-  changed_when: true
+  register: kubernetes_masters_kubectl_apply_result
+  changed_when: "'configured' in kubernetes_masters_kubectl_apply_result.stdout or 'created' in kubernetes_masters_kubectl_apply_result.stdout"
 
 
 - name: Get join command
   ansible.builtin.command: kubeadm token create --print-join-command
   register: kubernetes_masters_join_command_raw
-  changed_when: true
+  changed_when: false
 
 - name: Set join command
   ansible.builtin.set_fact:
