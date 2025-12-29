@@ -21,4 +21,4 @@ jobs:
           setup_python: "true"
           python_version: "3.14"
           working_directory: "ansible"
-          requirements_file: "ansible/uv.lock"
+          requirements_file: "ansible/requirements.txt"
