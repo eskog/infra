@@ -4,7 +4,6 @@
   become: yes
   tasks:
   - name: Detect operating system
-    hosts: all
     ansible.builtin.set_fact:
       is_debian: "{{ ansible_os_family == 'Debian' }}"
       is_rhel: "{{ ansible_os_family == 'RedHat' }}"
