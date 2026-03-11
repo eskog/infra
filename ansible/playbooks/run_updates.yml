@@ -1,23 +1,22 @@
 ---
 - name: Run updates on all hosts
   hosts: all
-  become: yes
+  become: true
   tasks:
-  - name: Detect operating system
-    ansible.builtin.set_fact:
-      is_debian: "{{ ansible_os_family == 'Debian' }}"
-      is_rhel: "{{ ansible_os_family == 'RedHat' }}"
-  
-  - name: Update all packages (Debian)
-    ansible.builtin.apt:
-      name: '*'
-      state: latest
-      update_cache: yes
-    when: is_debian
-  
-  - name: Update all packages (RHEL)
-    ansible.builtin.dnf:
-      name: '*'
-      state: latest
-      update_cache: yes
-    when: is_rhel
+    - name: Detect operating system
+      ansible.builtin.set_fact:
+        is_debian: "{{ ansible_os_family == 'Debian' }}"
+        is_rhel: "{{ ansible_os_family == 'RedHat' }}"
+
+    - name: Update all packages (Debian)
+      ansible.builtin.apt:
+        name: '*'
+        state: latest
+        update_cache: true
+      when: is_debian
+    - name: Update all packages (RHEL)
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+        update_cache: true
+      when: is_rhel
