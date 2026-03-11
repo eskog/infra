@@ -14,9 +14,11 @@
         state: latest
         update_cache: true
       when: is_debian
+      # noqa package-latest
     - name: Update all packages (RHEL)
       ansible.builtin.dnf:
         name: '*'
         state: latest
         update_cache: true
       when: is_rhel
+      # noqa package-latest
