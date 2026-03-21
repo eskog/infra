@@ -10,12 +10,34 @@ jobs:
   ansible-lint:
     name: Ansible Lint
     runs-on: ubuntu-24.04
+
+    env:
+      ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/ansible/collections
     steps:
-      - uses: actions/checkout@v6
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint@8ba9595a4acd1b906eb75568b34f6ef592cd1528
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          setup_python: true
-          python_version: "3.14"
-          working_directory: "ansible"
-          requirements_file: "requirements.yml"
+          python-version: "3.13"
+
+      # Sync dependencies from uv.lock
+      - name: Install Python dependencies
+        working-directory: ansible
+        run: uv sync
+
+      # Install Ansible collections into repo-local path
+      - name: Install Ansible collections
+        working-directory: ansible
+        run: |
+          mkdir -p collections
+          uv run ansible-galaxy collection install \
+            -r requirements.yml \
+            -p collections
+
+      # Run ansible-lint inside uv environment
+      - name: Run ansible-lint
+        working-directory: ansible
+        run: uv run ansible-lint
