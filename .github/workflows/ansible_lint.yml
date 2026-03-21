@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.14"  # safer than 3.14 for now
+          python-version: "3.13"
 
       # Sync dependencies from uv.lock
       - name: Install Python dependencies
@@ -32,14 +32,12 @@ jobs:
       - name: Install Ansible collections
         working-directory: ansible
         run: |
-          mkdir -p ansible/collections
+          mkdir -p collections
           uv run ansible-galaxy collection install \
-            -r ansible/requirements.yml \
-            -p ansible/collections
+            -r requirements.yml \
+            -p collections
 
       # Run ansible-lint inside uv environment
       - name: Run ansible-lint
         working-directory: ansible
-        run: |
-          cd ansible
-          uv run ansible-lint
+        run: uv run ansible-lint
