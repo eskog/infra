@@ -25,10 +25,12 @@ jobs:
 
       # Sync dependencies from uv.lock
       - name: Install Python dependencies
+        working-directory: ansible
         run: uv sync
 
       # Install Ansible collections into repo-local path
       - name: Install Ansible collections
+        working-directory: ansible
         run: |
           mkdir -p ansible/collections
           uv run ansible-galaxy collection install \
@@ -37,6 +39,7 @@ jobs:
 
       # Run ansible-lint inside uv environment
       - name: Run ansible-lint
+        working-directory: ansible
         run: |
           cd ansible
           uv run ansible-lint
