@@ -6,3 +6,4 @@ vars.pkr.hcl
 terraform/.terraform/*
 rndc.key
 .vscode/*
+packer/Rocky-linux/downloaded_iso_path/*
