@@ -21,9 +21,11 @@ variable "proxmox_url" {
 
 source "proxmox-iso" "rocky" {
   boot_command = [
-  "<esc><wait>",
-  "linux inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg ",
-  "inst.text inst.stage2=hd:LABEL=Rocky-9-6-x86_64-dvd<enter>"
+  "<up><wait>",
+  "e<wait>",
+  "<down><down><end>",
+  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg inst.text",
+  "<f10>"
 ]
   boot_wait    = "10s"
   disks {
@@ -40,8 +42,8 @@ source "proxmox-iso" "rocky" {
   http_directory           = "http"
   insecure_skip_tls_verify = true
   boot_iso {
-    iso_url           = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.6-x86_64-minimal.iso"
-    iso_checksum      = "sha256:aed9449cf79eb2d1c365f4f2561f923a80451b3e8fdbf595889b4cf0ac6c58b8"
+    iso_url           = "https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.1-x86_64-minimal.iso"
+    iso_checksum      = "sha256:5aafc2c86e606428cd7c5802b0d28c220f34c181a57eefff2cc6f65214714499"
     iso_storage_pool  = "local"  # or your appropriate pool
     type              = "sata"
   }
@@ -57,8 +59,8 @@ source "proxmox-iso" "rocky" {
   ssh_timeout          = "10m"
   ssh_username         = "admin"
   
-  template_description = "Rocky 9, generated on ${timestamp()}"
-  template_name        = "rocky-9"
+  template_description = "Rocky 10, generated on ${timestamp()}"
+  template_name        = "rocky-10"
   
   username             = "${var.TOKEN_ID}"
   
