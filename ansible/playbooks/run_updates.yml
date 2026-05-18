@@ -5,8 +5,8 @@
   tasks:
     - name: Detect operating system
       ansible.builtin.set_fact:
-        is_debian: "{{ ansible_os_family == 'Debian' }}"
-        is_rhel: "{{ ansible_os_family == 'RedHat' }}"
+        is_debian: "{{ ansible_facts['os_family'] == 'Debian' }}"
+        is_rhel: "{{ ansible_facts['os_family'] == 'RedHat' }}"
 
     - name: Update all packages (Debian)
       ansible.builtin.apt:
