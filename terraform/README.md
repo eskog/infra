@@ -1,6 +1,6 @@
 # Terraform
 
-Don't forget to source the setenv.sh file before running
+Don't forget to copy `setenv.example` to `setenv.sh`, update values, and source it before running.
 
 ## After upgrade of plugins
 
