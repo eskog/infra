@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: KICS
-        uses: checkmarx/kics-action@05aa5eb70eede1355220f4ca5238d96b397e30a6
+        uses: checkmarx/kics-action@4a16c2130b02104dc2624c133d5224080e7cc49b
         with:
           path: ansible,packer,terraform
           token: ${{ secrets.PAT_TOKEN }}
